@@ -1,0 +1,21 @@
+plugins {
+  id 'application'
+  id 'org.openjfx.javafxplugin' version '0.0.5'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    /* uncomment for cross-platform jar: */
+//    compile "org.openjfx:javafx-graphics:11:win"
+//    compile "org.openjfx:javafx-graphics:11:linux"
+//    compile "org.openjfx:javafx-graphics:11:mac"
+}
+
+javafx {
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+mainClassName = 'org.openjfx.MainApp'

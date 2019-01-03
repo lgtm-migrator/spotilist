@@ -18,4 +18,4 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-mainClassName = 'org.openjfx.MainApp'
+mainClassName = 'de.jonas_thelemann.MainApp'

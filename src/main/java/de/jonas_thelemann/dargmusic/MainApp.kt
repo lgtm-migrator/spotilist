@@ -7,14 +7,21 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
+import org.apache.logging.log4j.LogManager
 
 import java.io.IOException
+import java.lang.Exception
 import kotlin.system.exitProcess
 
 class MainApp : Application() {
 
     override fun start(stage: Stage) {
-        Persistence.loadSettings()
+        try {
+            Persistence.loadSettings()
+        } catch (e: Exception) {
+            LogManager.getLogger().error("Loading application settings failed!", e)
+        }
+
         DargmusicStage.makeDargmusicStage(stage)
 
         Companion.stage = stage
@@ -31,9 +38,8 @@ class MainApp : Application() {
             stage.scene = scene
             stage.show()
         } catch (e: IOException) {
-            e.printStackTrace()
+            LogManager.getLogger().error("Loading the dashboard failed!", e)
         }
-
     }
 
     companion object {

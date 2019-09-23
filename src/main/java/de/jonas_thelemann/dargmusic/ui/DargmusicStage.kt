@@ -1,5 +1,6 @@
-package de.jonas_thelemann.dargmusic
+package de.jonas_thelemann.dargmusic.ui
 
+import de.jonas_thelemann.dargmusic.MainApp
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
@@ -18,7 +19,7 @@ class DargmusicStage(fxmlPath: String, modality: Modality) : Stage() {
 
             this.scene = scene
             this.title = MainApp.APPLICATION_TITLE
-            this.icons.add(Image(javaClass.getResourceAsStream("icons/icon.png")))
+            this.icons.add(Image(javaClass.getResourceAsStream("../icons/icon.png")))
             this.initModality(modality)
             this.initOwner(MainApp.stage)
         } catch (e: IOException) {

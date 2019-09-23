@@ -1,9 +1,9 @@
 package de.jonas_thelemann.dargmusic
 
 import de.jonas_thelemann.dargmusic.persistence.Persistence
+import de.jonas_thelemann.dargmusic.ui.DargmusicStage
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
-import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage

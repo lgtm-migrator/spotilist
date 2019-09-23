@@ -1,10 +1,8 @@
-package de.jonas_thelemann.dargmusic.fxml
+package de.jonas_thelemann.dargmusic.ui.controllers
 
-import de.jonas_thelemann.dargmusic.DargmusicStage
+import de.jonas_thelemann.dargmusic.ui.DargmusicStage
 import javafx.fxml.FXML
-import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
-import javafx.scene.Node
 import javafx.scene.layout.VBox
 import javafx.stage.Modality
 
@@ -21,6 +19,6 @@ class DashboardController : Initializable {
 
     @FXML
     private fun menuFileSettingsAction() {
-        DargmusicStage("fxml/Settings.fxml", Modality.APPLICATION_MODAL).showStyled("css/styles.css")
+        DargmusicStage("../fxml/Settings.fxml", Modality.APPLICATION_MODAL).showStyled("../css/styles.css")
     }
 }

@@ -1,4 +1,4 @@
-package de.jonas_thelemann.dargmusic.fxml
+package de.jonas_thelemann.dargmusic.ui.controllers
 
 import de.jonas_thelemann.dargmusic.util.Etter
 import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings

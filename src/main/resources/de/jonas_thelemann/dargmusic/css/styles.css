@@ -1,0 +1,95 @@
+* {
+    -fx-my-background-color: #252525;
+    -fx-my-background-color-light: #555555;
+    -fx-my-text-color: #ffffff;
+    -fx-fill: -fx-my-text-color;
+    -fx-text-fill: -fx-my-text-color;
+    -fx-font-family: Arial;
+}
+
+AnchorPane, Button, HBox, MenuBar, ScrollPane, VBox {
+    -fx-background-color: -fx-my-background-color;
+}
+
+Button, ComboBox, ComboBox > *, TextArea, TextField {
+    -fx-background-color: -fx-my-background-color-light;
+}
+
+Label.h1 {
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+}
+
+Label.h2 {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+.bold {
+    -fx-font-weight: bold;
+}
+
+.combo-box .list-cell, .combo-box-popup .list-view {
+    -fx-background-color: -fx-my-background-color-light;
+}
+
+.context-menu {
+    -fx-background-color: -fx-my-background-color-light;
+}
+
+.scroll-pane .corner {
+    -fx-background-color: -fx-my-background-color;
+}
+
+.scroll-pane .scroll-bar:horizontal ,
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb,
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-my-background-color-light;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0em;
+}
+
+.scroll-pane .scroll-bar:horizontal .track ,
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-radius: 0em;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: -fx-my-background-color;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 75px;
+}
+
+.tab-pane .tab {
+    -fx-background-color: -fx-my-background-color;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: -fx-my-background-color-light;
+}
+
+.tab .tab-label {
+    -fx-font-weight: bold;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}

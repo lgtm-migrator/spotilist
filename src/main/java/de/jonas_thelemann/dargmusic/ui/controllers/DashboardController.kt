@@ -19,6 +19,6 @@ class DashboardController : Initializable {
 
     @FXML
     private fun menuFileSettingsAction() {
-        DargmusicStage("../fxml/Settings.fxml", Modality.APPLICATION_MODAL).showStyled("../css/styles.css")
+        DargmusicStage("../fxml/Settings.fxml", Modality.APPLICATION_MODAL, "Settings").showStyled("../css/styles.css")
     }
 }

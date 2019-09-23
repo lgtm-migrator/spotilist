@@ -11,14 +11,14 @@ import org.apache.logging.log4j.LogManager
 
 import java.io.IOException
 
-class DargmusicStage(fxmlPath: String, modality: Modality) : Stage() {
+class DargmusicStage(fxmlPath: String, modality: Modality, title: String) : Stage() {
     init {
         try {
             val dashboard = FXMLLoader.load<Parent>(javaClass.getResource(fxmlPath))
             val scene = Scene(dashboard)
 
             this.scene = scene
-            this.title = MainApp.APPLICATION_TITLE
+            this.title = MainApp.APPLICATION_TITLE + " - " + title
             this.icons.add(Image(javaClass.getResourceAsStream("../icons/icon.png")))
             this.initModality(modality)
             this.initOwner(MainApp.stage)

@@ -36,13 +36,13 @@ object Persistence {
     fun loadSettings() {
         if (Files.exists(settingsFile)) {
             val settingsJson = String(Files.readAllBytes(settingsFile))
-            val tmp1: DargmusicSettings = jackson.readValue(settingsJson, DargmusicSettings.javaClass)
-            val tmp: SpotifySettings = tmp1.spotifySettings
-            val tmpy: YouTubeSettings = tmp1.youTubeSettings
+            val deserializedDargmusicSettings: DargmusicSettings = jackson.readValue(settingsJson, DargmusicSettings.javaClass)
+            val deserializedSpotifySettings: SpotifySettings = deserializedDargmusicSettings.spotifySettings
+            val deserializedYouTubeSettings: YouTubeSettings = deserializedDargmusicSettings.youTubeSettings
 
-            DargmusicSettings.spotifySettings.clientId = tmp.clientId
-            DargmusicSettings.spotifySettings.clientSecret = tmp.clientSecret
-            DargmusicSettings.youTubeSettings.apiKey = tmpy.apiKey
+            DargmusicSettings.spotifySettings.clientId = deserializedSpotifySettings.clientId
+            DargmusicSettings.spotifySettings.clientSecret = deserializedSpotifySettings.clientSecret
+            DargmusicSettings.youTubeSettings.apiKey = deserializedYouTubeSettings.apiKey
         }
     }
 

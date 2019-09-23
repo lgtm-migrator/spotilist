@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.model.PlaylistItem
-import de.jonas_thelemann.dargmusic.persistence.settings.DargmusicSettings
-import de.jonas_thelemann.dargmusic.persistence.settings.spotify.SpotifySettings
-import de.jonas_thelemann.dargmusic.persistence.settings.youtube.YouTubeSettings
+import de.jonas_thelemann.dargmusic.persistence.state.settings.DargmusicSettings
+import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings
+import de.jonas_thelemann.dargmusic.persistence.state.settings.youtube.YouTubeSettings
 
 import java.io.IOException
 import java.nio.file.Files

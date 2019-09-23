@@ -1,4 +1,4 @@
-package de.jonas_thelemann.dargmusic.persistence.settings.spotify
+package de.jonas_thelemann.dargmusic.persistence.state.settings.spotify
 
 object SpotifySettings {
     var clientId: String = String()

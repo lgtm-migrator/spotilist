@@ -1,8 +1,8 @@
 package de.jonas_thelemann.dargmusic.fxml
 
-import de.jonas_thelemann.dargmusic.persistence.settings.Etter
-import de.jonas_thelemann.dargmusic.persistence.settings.spotify.SpotifySettings
-import de.jonas_thelemann.dargmusic.persistence.settings.youtube.YouTubeSettings
+import de.jonas_thelemann.dargmusic.util.Etter
+import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings
+import de.jonas_thelemann.dargmusic.persistence.state.settings.youtube.YouTubeSettings
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.TextField

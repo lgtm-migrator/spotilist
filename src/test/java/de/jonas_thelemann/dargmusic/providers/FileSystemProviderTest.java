@@ -1,4 +1,4 @@
-package de.jonas_thelemann.dargmusic.modules;
+package de.jonas_thelemann.dargmusic.providers;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 
-class FileSystemModuleTest {
-    private FileSystemModule fileSystemModule = new FileSystemModule();
+class FileSystemProviderTest {
+    private FileSystemProvider fileSystemModule = new FileSystemProvider();
 
     @Test
     void getPlaylistIdTest() {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.model.PlaylistItem
 import de.jonas_thelemann.dargmusic.persistence.state.DargmusicStateWrapper
+import de.jonas_thelemann.dargmusic.ui.DargmusicNotification
 
 import java.io.IOException
 import java.nio.file.Files
@@ -14,6 +15,7 @@ import java.util.HashMap
 import java.util.Properties
 
 import java.util.logging.Logger.getGlobal
+import kotlin.system.exitProcess
 
 object Persistence {
     private val appDataDirectory: Path
@@ -33,7 +35,12 @@ object Persistence {
 
     fun loadSettings() {
         if (Files.exists(settingsFile)) {
-            DargmusicStateWrapper.state = jackson.readValue(String(Files.readAllBytes(settingsFile)), DargmusicStateWrapper.javaClass).state
+            try {
+                DargmusicStateWrapper.state = jackson.readValue(String(Files.readAllBytes(settingsFile)), DargmusicStateWrapper.javaClass).state
+            } catch (e: Exception) {
+                DargmusicNotification.displayError("Loading application settings failed!", e)
+                exitProcess(0)
+            }
         }
     }
 

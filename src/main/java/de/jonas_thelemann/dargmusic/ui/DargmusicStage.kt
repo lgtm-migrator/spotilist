@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager
 
 import java.io.IOException
 
-class DargmusicStage(fxmlPath: String, modality: Modality, title: String) : Stage() {
+class DargmusicStage(fxmlPath: String, modality: Modality, title: String, isAlwaysOnTop: Boolean = false) : Stage() {
     init {
         try {
             val dashboard = FXMLLoader.load<Parent>(javaClass.getResource(fxmlPath))
@@ -21,15 +21,26 @@ class DargmusicStage(fxmlPath: String, modality: Modality, title: String) : Stag
             this.title = MainApp.APPLICATION_TITLE + " - " + title
             this.icons.add(Image(javaClass.getResourceAsStream("../icons/icon.png")))
             this.initModality(modality)
-            this.initOwner(MainApp.stage)
+            this.isAlwaysOnTop = true
+
+            if (MainApp.isStageInitialized()) {
+                this.initOwner(MainApp.stage)
+            } else {
+                this.initOwner(Stage())
+            }
         } catch (e: IOException) {
             LogManager.getLogger().error("Construction of DargmusicStage failed!", e)
         }
     }
 
-    fun showStyled(cssPath: String) {
-        this.show()
+    fun showStyled(cssPath: String, andWait: Boolean = false) {
         this.scene.stylesheets.add(javaClass.getResource(cssPath).toExternalForm())
+
+        if (andWait) {
+            this.showAndWait()
+        } else {
+            this.show()
+        }
     }
 
     companion object {

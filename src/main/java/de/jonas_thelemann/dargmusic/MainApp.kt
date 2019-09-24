@@ -1,6 +1,7 @@
 package de.jonas_thelemann.dargmusic
 
 import de.jonas_thelemann.dargmusic.persistence.Persistence
+import de.jonas_thelemann.dargmusic.ui.DargmusicNotification
 import de.jonas_thelemann.dargmusic.ui.DargmusicStage
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
@@ -16,11 +17,7 @@ import kotlin.system.exitProcess
 class MainApp : Application() {
 
     override fun start(stage: Stage) {
-        try {
-            Persistence.loadSettings()
-        } catch (e: Exception) {
-            LogManager.getLogger().error("Loading application settings failed!", e)
-        }
+        Persistence.loadSettings()
 
         DargmusicStage.makeDargmusicStage(stage)
 
@@ -43,13 +40,15 @@ class MainApp : Application() {
     }
 
     companion object {
-        internal const val APPLICATION_TITLE = "Dargmusic"
-
         lateinit var stage: Stage
+
+        internal const val APPLICATION_TITLE = "Dargmusic"
 
         @JvmStatic
         fun main(args: Array<String>) {
             launch(MainApp::class.java, *args)
         }
+
+        fun isStageInitialized() = this::stage.isInitialized
     }
 }

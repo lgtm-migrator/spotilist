@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.model.PlaylistItem
-import de.jonas_thelemann.dargmusic.persistence.state.settings.DargmusicSettings
-import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings
-import de.jonas_thelemann.dargmusic.persistence.state.settings.youtube.YouTubeSettings
+import de.jonas_thelemann.dargmusic.persistence.state.DargmusicStateWrapper
 
 import java.io.IOException
 import java.nio.file.Files
@@ -35,14 +33,7 @@ object Persistence {
 
     fun loadSettings() {
         if (Files.exists(settingsFile)) {
-            val settingsJson = String(Files.readAllBytes(settingsFile))
-            val deserializedDargmusicSettings: DargmusicSettings = jackson.readValue(settingsJson, DargmusicSettings.javaClass)
-            val deserializedSpotifySettings: SpotifySettings = deserializedDargmusicSettings.spotifySettings
-            val deserializedYouTubeSettings: YouTubeSettings = deserializedDargmusicSettings.youTubeSettings
-
-            DargmusicSettings.spotifySettings.clientId = deserializedSpotifySettings.clientId
-            DargmusicSettings.spotifySettings.clientSecret = deserializedSpotifySettings.clientSecret
-            DargmusicSettings.youTubeSettings.apiKey = deserializedYouTubeSettings.apiKey
+            DargmusicStateWrapper.state = jackson.readValue(String(Files.readAllBytes(settingsFile)), DargmusicStateWrapper.javaClass).state
         }
     }
 
@@ -51,7 +42,7 @@ object Persistence {
             Files.createDirectories(settingsFile.parent)
         }
 
-        Files.writeString(settingsFile, jackson.writeValueAsString(DargmusicSettings))
+        Files.writeString(settingsFile, jackson.writeValueAsString(DargmusicStateWrapper))
     }
 
     fun getCacheDirectory(): Path {

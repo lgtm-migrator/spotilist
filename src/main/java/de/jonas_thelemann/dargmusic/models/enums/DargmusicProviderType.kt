@@ -23,4 +23,8 @@ enum class DargmusicProviderType(val type: String) {
             return map[type]
         }
     }
+
+    override fun toString(): String {
+        return this.type
+    }
 }

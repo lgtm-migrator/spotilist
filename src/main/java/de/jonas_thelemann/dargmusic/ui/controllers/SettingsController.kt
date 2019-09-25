@@ -1,26 +1,25 @@
 package de.jonas_thelemann.dargmusic.ui.controllers
 
-import de.jonas_thelemann.dargmusic.util.Etter
 import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings
 import de.jonas_thelemann.dargmusic.persistence.state.settings.youtube.YouTubeSettings
+import de.jonas_thelemann.dargmusic.util.Etter
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.TextField
-
 import java.net.URL
-import java.util.ResourceBundle
+import java.util.*
 
 class SettingsController : Initializable {
 
     @FXML
-    private lateinit var spotifyClientIdTextField : TextField
+    private lateinit var spotifyClientIdTextField: TextField
     @FXML
-    private lateinit var spotifyClientSecretTextField : TextField
+    private lateinit var spotifyClientSecretTextField: TextField
     @FXML
-    private lateinit var youTubeApiKeyTextField : TextField
+    private lateinit var youTubeApiKeyTextField: TextField
 
     override fun initialize(url: URL?, rb: ResourceBundle?) {
-        val inputToEtterMap = mapOf<TextField, Etter<String, String>>(
+        val inputToEtterMap = mapOf(
                 spotifyClientIdTextField to Etter({ SpotifySettings.clientId }, { SpotifySettings.clientId = it }),
                 spotifyClientSecretTextField to Etter({ SpotifySettings.clientSecret }, { SpotifySettings.clientSecret = it }),
                 youTubeApiKeyTextField to Etter({ YouTubeSettings.apiKey }, { YouTubeSettings.apiKey = it })

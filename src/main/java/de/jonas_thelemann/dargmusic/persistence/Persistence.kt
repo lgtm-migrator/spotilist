@@ -6,14 +6,11 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.model.PlaylistItem
 import de.jonas_thelemann.dargmusic.persistence.state.DargmusicStateWrapper
 import de.jonas_thelemann.dargmusic.ui.DargmusicNotification
-
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.HashMap
-import java.util.Properties
-
+import java.util.*
 import java.util.logging.Logger.getGlobal
 import kotlin.system.exitProcess
 

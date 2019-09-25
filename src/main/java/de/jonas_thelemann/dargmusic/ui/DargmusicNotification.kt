@@ -3,7 +3,6 @@ package de.jonas_thelemann.dargmusic.ui
 import de.jonas_thelemann.dargmusic.ui.controllers.NotificationController
 import javafx.stage.Modality
 import org.apache.logging.log4j.LogManager
-import java.lang.Exception
 
 object DargmusicNotification {
     fun displayError(text: String, e: Exception) {

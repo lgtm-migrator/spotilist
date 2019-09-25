@@ -7,7 +7,7 @@
     -fx-font-family: Arial;
 }
 
-AnchorPane, Button, HBox, MenuBar, ScrollPane, VBox {
+AnchorPane, Button, GridPane, HBox, MenuBar, ScrollPane, VBox {
     -fx-background-color: -fx-my-background-color;
 }
 
@@ -41,7 +41,7 @@ Label.h2 {
     -fx-background-color: -fx-my-background-color;
 }
 
-.scroll-pane .scroll-bar:horizontal ,
+.scroll-pane .scroll-bar:horizontal,
 .scroll-pane .scroll-bar:vertical {
     -fx-background-color: transparent;
 }
@@ -53,7 +53,7 @@ Label.h2 {
     -fx-background-radius: 0em;
 }
 
-.scroll-pane .scroll-bar:horizontal .track ,
+.scroll-pane .scroll-bar:horizontal .track,
 .scroll-pane .scroll-bar:vertical .track {
     -fx-background-radius: 0em;
 }
@@ -86,10 +86,30 @@ Label.h2 {
     -fx-background-color: transparent;
 }
 
-.text-area .scroll-pane .viewport{
+.text-area .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 
-.text-area .scroll-pane .content{
+.text-area .scroll-pane .content {
     -fx-background-color: transparent;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -fx-my-background-color;
+    -fx-border-color: -fx-my-background-color-light;
+}
+
+.titled-pane > .content {
+    -fx-border-color: -fx-my-background-color-light;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.titled-pane:focused > .title > .arrow-button .arrow {
+    -fx-background-color: white;
 }

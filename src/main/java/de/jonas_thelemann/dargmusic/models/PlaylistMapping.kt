@@ -1,19 +1,40 @@
 package de.jonas_thelemann.dargmusic.models
 
 import de.jonas_thelemann.dargmusic.models.enums.DargmusicProviderType
+import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
+import de.jonas_thelemann.dargmusic.providers.FileSystemProvider
+import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
+import de.jonas_thelemann.dargmusic.util.Util
 
-data class PlaylistMapping<S, T> (private val name: String,
-                                  private val sourceResourceType: DargmusicProviderType,
-                                  private val targetResourceType: DargmusicProviderType,
-                                  private val sourceId: String,
-                                  private val targetId: String,
-                                  private val blacklistSource: Array<S>,
-                                  private val blacklistTarget: Array<T>) {
+data class PlaylistMapping(var name: String = Util.getUnusedSubscriptionName(DargmusicState.data.playlistMappings),
+                           var sourceResourceType: DargmusicProviderType = DargmusicProviderType.NONE,
+                           var targetResourceType: DargmusicProviderType = DargmusicProviderType.NONE,
+                           var sourceId: String = String(),
+                           var targetId: String = String(),
+                           var blacklistSource: Array<String> = arrayOf(),
+                           var blacklistTarget: Array<String> = arrayOf()) {
+
+    fun validate(): Boolean {
+        return name != ""
+                && sourceResourceType != DargmusicProviderType.NONE
+                && validateId(sourceId, sourceResourceType)
+                && targetResourceType != DargmusicProviderType.NONE
+                && validateId(targetId, targetResourceType)
+    }
+
+    private fun validateId(id: String, type: DargmusicProviderType): Boolean {
+        return when (type) {
+            DargmusicProviderType.FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(id)
+            DargmusicProviderType.NONE -> true
+            DargmusicProviderType.SPOTIFY -> SpotifyProvider.isPlaylistIdValid(id)
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as PlaylistMapping<*, *>
+        other as PlaylistMapping
 
         if (name != other.name) return false
         if (sourceResourceType != other.sourceResourceType) return false

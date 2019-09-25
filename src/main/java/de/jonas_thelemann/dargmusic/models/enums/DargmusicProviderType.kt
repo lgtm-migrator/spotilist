@@ -1,13 +1,14 @@
 package de.jonas_thelemann.dargmusic.models.enums
 
-import java.util.HashMap
+import java.util.*
 
 /**
  * An enumeration of all possible module types.
  */
 enum class DargmusicProviderType(val type: String) {
-    YOUTUBE("youtube"),
-    FILESYSTEM("filesystem");
+    NONE("none"),
+    FILESYSTEM("Filesystem"),
+    SPOTIFY("Spotify");
 
     companion object {
         private val map = HashMap<String, DargmusicProviderType>()

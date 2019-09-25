@@ -1,8 +1,8 @@
 package de.jonas_thelemann.dargmusic
 
 import de.jonas_thelemann.dargmusic.persistence.Persistence
-import de.jonas_thelemann.dargmusic.ui.DargmusicNotification
 import de.jonas_thelemann.dargmusic.ui.DargmusicStage
+import de.jonas_thelemann.dargmusic.ui.controllers.DashboardController
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
@@ -11,7 +11,6 @@ import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
 
 import java.io.IOException
-import java.lang.Exception
 import kotlin.system.exitProcess
 
 class MainApp : Application() {
@@ -29,7 +28,10 @@ class MainApp : Application() {
         }
 
         try {
-            val dashboard = FXMLLoader.load<Parent>(javaClass.getResource("fxml/Dashboard.fxml"))
+            val dashboardLoader = FXMLLoader(javaClass.getResource("fxml/Dashboard.fxml"))
+            val dashboard = dashboardLoader.load<Parent>()
+            dashboardController = dashboardLoader.getController<DashboardController>()
+
             val scene = Scene(dashboard)
 
             stage.scene = scene
@@ -41,6 +43,7 @@ class MainApp : Application() {
 
     companion object {
         lateinit var stage: Stage
+        lateinit var dashboardController: DashboardController
 
         internal const val APPLICATION_TITLE = "Dargmusic"
 

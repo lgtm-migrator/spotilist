@@ -21,6 +21,10 @@ object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
     override fun isPlaylistIdValid(playlistId: String): Boolean {
         val errorMessage = "Playlist validation failed!"
 
+        if (playlistId == "") {
+            return false
+        }
+
         return try {
             SpotifyApi.builder().build().getPlaylist(playlistId).build().execute()
             true

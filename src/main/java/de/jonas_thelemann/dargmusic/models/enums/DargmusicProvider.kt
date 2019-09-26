@@ -5,13 +5,13 @@ import java.util.*
 /**
  * An enumeration of all possible module types.
  */
-enum class DargmusicProviderType(val type: String) {
+enum class DargmusicProvider(val type: String) {
     NONE("none"),
     FILESYSTEM("Filesystem"),
     SPOTIFY("Spotify");
 
     companion object {
-        private val map = HashMap<String, DargmusicProviderType>()
+        private val map = HashMap<String, DargmusicProvider>()
 
         init {
             for (DargmusicModuleType in values()) {
@@ -19,7 +19,7 @@ enum class DargmusicProviderType(val type: String) {
             }
         }
 
-        fun keyOf(type: String): DargmusicProviderType? {
+        fun keyOf(type: String): DargmusicProvider? {
             return map[type]
         }
     }

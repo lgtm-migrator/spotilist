@@ -1,32 +1,32 @@
 package de.jonas_thelemann.dargmusic.models
 
-import de.jonas_thelemann.dargmusic.models.enums.DargmusicProviderType
+import de.jonas_thelemann.dargmusic.models.enums.DargmusicProvider
 import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
 import de.jonas_thelemann.dargmusic.providers.FileSystemProvider
 import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
 import de.jonas_thelemann.dargmusic.util.Util
 
 data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(DargmusicState.data.playlistMappings),
-                           var sourceResourceType: DargmusicProviderType = DargmusicProviderType.NONE,
-                           var targetResourceType: DargmusicProviderType = DargmusicProviderType.NONE,
+                           var sourceProvider: DargmusicProvider = DargmusicProvider.NONE,
                            var sourceId: String = String(),
+                           var targetProvider: DargmusicProvider = DargmusicProvider.NONE,
                            var targetId: String = String(),
                            var blacklistSource: Array<String> = arrayOf(),
                            var blacklistTarget: Array<String> = arrayOf()) {
 
     fun validate(): Boolean {
         return name != ""
-                && sourceResourceType != DargmusicProviderType.NONE
-                && validateId(sourceId, sourceResourceType)
-                && targetResourceType != DargmusicProviderType.NONE
-                && validateId(targetId, targetResourceType)
+                && sourceProvider != DargmusicProvider.NONE
+                && validateId(sourceId, sourceProvider)
+                && targetProvider != DargmusicProvider.NONE
+                && validateId(targetId, targetProvider)
     }
 
-    private fun validateId(id: String, type: DargmusicProviderType): Boolean {
+    private fun validateId(id: String, type: DargmusicProvider): Boolean {
         return when (type) {
-            DargmusicProviderType.FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(id)
-            DargmusicProviderType.NONE -> true
-            DargmusicProviderType.SPOTIFY -> SpotifyProvider.isPlaylistIdValid(id)
+            DargmusicProvider.FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(id)
+            DargmusicProvider.NONE -> true
+            DargmusicProvider.SPOTIFY -> SpotifyProvider.isPlaylistIdValid(id)
         }
     }
 
@@ -37,8 +37,8 @@ data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(
         other as PlaylistMapping
 
         if (name != other.name) return false
-        if (sourceResourceType != other.sourceResourceType) return false
-        if (targetResourceType != other.targetResourceType) return false
+        if (sourceProvider != other.sourceProvider) return false
+        if (targetProvider != other.targetProvider) return false
         if (sourceId != other.sourceId) return false
         if (targetId != other.targetId) return false
         if (!blacklistSource.contentEquals(other.blacklistSource)) return false
@@ -49,8 +49,8 @@ data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(
 
     override fun hashCode(): Int {
         var result = name.hashCode()
-        result = 31 * result + sourceResourceType.hashCode()
-        result = 31 * result + targetResourceType.hashCode()
+        result = 31 * result + sourceProvider.hashCode()
+        result = 31 * result + targetProvider.hashCode()
         result = 31 * result + sourceId.hashCode()
         result = 31 * result + targetId.hashCode()
         result = 31 * result + blacklistSource.contentHashCode()

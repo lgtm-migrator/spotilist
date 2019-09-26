@@ -2,7 +2,7 @@ package de.jonas_thelemann.dargmusic.ui.controllers
 
 import de.jonas_thelemann.dargmusic.MainApp
 import de.jonas_thelemann.dargmusic.models.PlaylistMapping
-import de.jonas_thelemann.dargmusic.models.enums.DargmusicProviderType
+import de.jonas_thelemann.dargmusic.models.enums.DargmusicProvider
 import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -26,11 +26,11 @@ class PlaylistMappingController : Initializable {
     @FXML
     private lateinit var txtName: TextField
     @FXML
-    private lateinit var cmbSourceProvider: ComboBox<DargmusicProviderType>
+    private lateinit var cmbSourceProvider: ComboBox<DargmusicProvider>
     @FXML
     private lateinit var txtSourceId: TextField
     @FXML
-    private lateinit var cmbTargetProvider: ComboBox<DargmusicProviderType>
+    private lateinit var cmbTargetProvider: ComboBox<DargmusicProvider>
     @FXML
     private lateinit var txtTargetId: TextField
     @FXML
@@ -39,22 +39,22 @@ class PlaylistMappingController : Initializable {
     var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, newValue ->
         tldpnPlaylistMapping.text = newValue.name
         txtName.text = newValue.name
-        cmbSourceProvider.value = newValue.sourceResourceType
+        cmbSourceProvider.value = newValue.sourceProvider
         txtSourceId.text = newValue.sourceId
-        cmbTargetProvider.value = newValue.targetResourceType
+        cmbTargetProvider.value = newValue.targetProvider
         txtTargetId.text = newValue.targetId
     }
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
-        val providerList: ObservableList<DargmusicProviderType> = FXCollections.observableArrayList()
+        val providerList: ObservableList<DargmusicProvider> = FXCollections.observableArrayList()
 
-        DargmusicProviderType.values().forEach {
+        DargmusicProvider.values().forEach {
             providerList.add(it)
         }
 
-        val cmbInputToEtterMap = mapOf<ComboBox<DargmusicProviderType>, (DargmusicProviderType) -> Unit>(
-                cmbSourceProvider to { it -> playlistMapping.sourceResourceType = it },
-                cmbTargetProvider to { it -> playlistMapping.targetResourceType = it }
+        val cmbInputToEtterMap = mapOf<ComboBox<DargmusicProvider>, (DargmusicProvider) -> Unit>(
+                cmbSourceProvider to { it -> playlistMapping.sourceProvider = it },
+                cmbTargetProvider to { it -> playlistMapping.targetProvider = it }
         )
 
         for ((combobox, etter) in cmbInputToEtterMap) {

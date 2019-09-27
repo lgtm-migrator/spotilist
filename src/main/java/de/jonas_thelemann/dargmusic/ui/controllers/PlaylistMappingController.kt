@@ -49,7 +49,9 @@ class PlaylistMappingController : Initializable {
         val providerList: ObservableList<DargmusicProvider> = FXCollections.observableArrayList()
 
         DargmusicProvider.values().forEach {
-            providerList.add(it)
+            if (DargmusicProvider.isValid(it)) {
+                providerList.add(it)
+            }
         }
 
         val cmbInputToEtterMap = mapOf<ComboBox<DargmusicProvider>, (DargmusicProvider) -> Unit>(

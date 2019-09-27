@@ -7,9 +7,11 @@ import com.wrapper.spotify.exceptions.detailed.UnauthorizedException
 import com.wrapper.spotify.model_objects.specification.Playlist
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack
 import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
+import de.jonas_thelemann.dargmusic.persistence.state.data.providers.spotify.SpotifyData
 import org.apache.logging.log4j.LogManager
 import java.awt.Desktop
 import java.io.IOException
+import java.time.Instant
 
 
 object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
@@ -20,9 +22,9 @@ object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
     var spotifyApi: SpotifyApi = spotifyApiBuilder.build()
 
     init {
-        if (DargmusicState.data.spotifyData.accessToken != "") {
+        if (DargmusicState.data.spotifyData.authorizationCodeCredentials.accessToken != "") {
             spotifyApi = spotifyApiBuilder
-                    .setAccessToken(DargmusicState.data.spotifyData.accessToken)
+                    .setAccessToken(DargmusicState.data.spotifyData.authorizationCodeCredentials.accessToken)
                     .build()
         }
     }
@@ -60,7 +62,7 @@ object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
     }
 
     fun isValid(): Boolean {
-        if (DargmusicState.data.spotifyData.accessToken == "") {
+        if (DargmusicState.data.spotifyData.authorizationCodeCredentials.accessToken == null) {
             return false
         }
 
@@ -85,6 +87,8 @@ object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
         val os = System.getProperty("os.name").toLowerCase()
         val runtime = Runtime.getRuntime()
 
+        SpotifyData.authorizationStarted = Instant.now().epochSecond
+
         if (os.contains("mac")) {
             runtime.exec("open $uri")
         } else if (os.contains("nix") || os.contains("nux")) {
@@ -99,10 +103,7 @@ object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
             return
         }
 
-        val authorizationCodeCredentials = spotifyApi.authorizationCode(authorizationCode)
+        DargmusicState.data.spotifyData.authorizationCodeCredentials = spotifyApi.authorizationCode(authorizationCode)
                 .build().execute()
-
-        DargmusicState.data.spotifyData.accessToken = authorizationCodeCredentials.accessToken
-        DargmusicState.data.spotifyData.refreshToken = authorizationCodeCredentials.refreshToken
     }
 }

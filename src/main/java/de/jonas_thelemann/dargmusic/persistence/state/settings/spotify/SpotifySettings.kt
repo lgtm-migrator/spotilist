@@ -1,6 +1,9 @@
 package de.jonas_thelemann.dargmusic.persistence.state.settings.spotify
 
+import java.net.URI
+
 object SpotifySettings {
-    var clientId: String = String()
-    var clientSecret: String = String()
+    var clientId = String()
+    var clientSecret = String()
+    var redirectUri = URI("")
 }

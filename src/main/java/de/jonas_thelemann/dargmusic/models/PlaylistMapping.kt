@@ -6,7 +6,7 @@ import de.jonas_thelemann.dargmusic.providers.FileSystemProvider
 import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
 import de.jonas_thelemann.dargmusic.util.Util
 
-data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(DargmusicState.data.playlistMappings),
+data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(DargmusicState.data.playlistMappingData.playlistMappings),
                            var sourceProvider: DargmusicProvider = DargmusicProvider.NONE,
                            var sourceId: String = String(),
                            var targetProvider: DargmusicProvider = DargmusicProvider.NONE,

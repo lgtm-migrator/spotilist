@@ -83,7 +83,7 @@ class PlaylistMappingController : Initializable {
 
     @FXML
     private fun delete() {
-        DargmusicState.data.playlistMappings.remove(playlistMapping)
+        DargmusicState.data.playlistMappingData.playlistMappings.remove(playlistMapping)
         MainApp.dashboardController.updatePlaylistMappings()
     }
 

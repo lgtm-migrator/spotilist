@@ -26,11 +26,13 @@ object SpotifyProvider : AbstractDargmusicProvider<Playlist, PlaylistTrack>() {
         }
 
         return try {
-            SpotifyApi.builder().build().getPlaylist(playlistId).build().execute()
+            spotifyApi.getPlaylist(playlistId).build().execute()
             true
         } catch (e: IOException) {
             LogManager.getLogger().error(errorMessage, e)
             false
+        } catch (e: UnauthorizedException) {
+            throw e
         } catch (e: SpotifyWebApiException) {
             if (e !is NotFoundException) {
                 LogManager.getLogger().error("$errorMessage SpotifyWebApiException is not a NotFoundException.", e)

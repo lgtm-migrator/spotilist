@@ -1,5 +1,9 @@
 package de.jonas_thelemann.dargmusic.models.enums
 
+import com.wrapper.spotify.SpotifyApi
+import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
+import de.jonas_thelemann.dargmusic.providers.FileSystemProvider
+import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
 import java.util.*
 
 /**
@@ -7,6 +11,7 @@ import java.util.*
  */
 enum class DargmusicProvider(val type: String) {
     NONE("none"),
+
     FILESYSTEM("Filesystem"),
     SPOTIFY("Spotify");
 
@@ -14,8 +19,24 @@ enum class DargmusicProvider(val type: String) {
         private val map = HashMap<String, DargmusicProvider>()
 
         init {
-            for (DargmusicModuleType in values()) {
-                map[DargmusicModuleType.type] = DargmusicModuleType
+            for (DargmusicProvider in values()) {
+                map[DargmusicProvider.type] = DargmusicProvider
+            }
+        }
+
+        fun isValid(provider: DargmusicProvider): Boolean {
+            return when (provider) {
+                NONE -> true
+                FILESYSTEM -> true
+                SPOTIFY -> SpotifyProvider.isValid()
+            }
+        }
+
+        fun isIdValid(id: String, type: DargmusicProvider): Boolean {
+            return when (type) {
+                FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(id)
+                NONE -> true
+                SPOTIFY -> SpotifyProvider.isValid() && SpotifyProvider.isPlaylistIdValid(id)
             }
         }
 

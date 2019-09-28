@@ -1,7 +1,8 @@
 package de.jonas_thelemann.dargmusic.providers
 
-interface IDargmusicProvider<PT, TT> {
-    fun getPlaylistId(playlist: PT): String
-    fun getPlaylistName(playlist: PT): String
+import de.jonas_thelemann.dargmusic.models.music.Playlist
+
+interface IDargmusicProvider {
+    fun getPlaylist(playlistId: String): Playlist
     fun isPlaylistIdValid(playlistId: String): Boolean
 }

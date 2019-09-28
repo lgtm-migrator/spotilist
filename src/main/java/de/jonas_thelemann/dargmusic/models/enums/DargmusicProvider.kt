@@ -1,22 +1,23 @@
 package de.jonas_thelemann.dargmusic.models.enums
 
-import com.wrapper.spotify.SpotifyApi
-import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
-import de.jonas_thelemann.dargmusic.providers.FileSystemProvider
-import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
+import de.jonas_thelemann.dargmusic.models.PlaylistMappingResource
+import de.jonas_thelemann.dargmusic.providers.IDargmusicProvider
+import de.jonas_thelemann.dargmusic.providers.NoneProvider
+import de.jonas_thelemann.dargmusic.providers.filesystem.FileSystemProvider
+import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyProvider
 import java.util.*
 
 /**
  * An enumeration of all possible module types.
  */
-enum class DargmusicProvider(val type: String) {
-    NONE("none"),
+enum class DargmusicProvider(val type: IDargmusicProvider) {
+    NONE(NoneProvider),
 
-    FILESYSTEM("Filesystem"),
-    SPOTIFY("Spotify");
+    FILESYSTEM(FileSystemProvider),
+    SPOTIFY(SpotifyProvider);
 
     companion object {
-        private val map = HashMap<String, DargmusicProvider>()
+        private val map = HashMap<IDargmusicProvider, DargmusicProvider>()
 
         init {
             for (DargmusicProvider in values()) {
@@ -26,26 +27,22 @@ enum class DargmusicProvider(val type: String) {
 
         fun isValid(provider: DargmusicProvider): Boolean {
             return when (provider) {
-                NONE -> true
                 FILESYSTEM -> true
-                SPOTIFY -> SpotifyProvider.isValid()
-            }
-        }
-
-        fun isIdValid(id: String, type: DargmusicProvider): Boolean {
-            return when (type) {
-                FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(id)
                 NONE -> true
-                SPOTIFY -> SpotifyProvider.isValid() && SpotifyProvider.isPlaylistIdValid(id)
+                SPOTIFY -> SpotifyProvider.isAuthorized()
             }
         }
 
-        fun keyOf(type: String): DargmusicProvider? {
+        fun isValid(playlistMappingResource: PlaylistMappingResource): Boolean {
+            return when (playlistMappingResource.provider) {
+                FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(playlistMappingResource.id)
+                NONE -> NoneProvider.isPlaylistIdValid(playlistMappingResource.id)
+                SPOTIFY -> SpotifyProvider.isAuthorized() && SpotifyProvider.isPlaylistIdValid(playlistMappingResource.id)
+            }
+        }
+
+        fun keyOf(type: IDargmusicProvider): DargmusicProvider? {
             return map[type]
         }
-    }
-
-    override fun toString(): String {
-        return this.type
     }
 }

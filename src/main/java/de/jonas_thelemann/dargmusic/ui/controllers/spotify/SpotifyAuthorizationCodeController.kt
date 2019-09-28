@@ -1,6 +1,6 @@
 package de.jonas_thelemann.dargmusic.ui.controllers.spotify
 
-import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
+import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyUtil
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Button
@@ -10,7 +10,7 @@ import java.net.URL
 import java.util.*
 
 
-class SpotifyAuthorizationCodeController: Initializable {
+class SpotifyAuthorizationCodeController : Initializable {
     @FXML
     private lateinit var spotifyAuthorizationCodeTextField: TextField
     @FXML
@@ -22,7 +22,7 @@ class SpotifyAuthorizationCodeController: Initializable {
 
     @FXML
     private fun save() {
-        SpotifyProvider.setAuthorizationCodeCredentials(spotifyAuthorizationCodeTextField.text)
+        SpotifyUtil.setAuthorizationCodeCredentials(spotifyAuthorizationCodeTextField.text)
         (spotifyAuthorizationCodeTextField.scene.window as Stage).close()
     }
 }

@@ -16,10 +16,6 @@
     </graphic>
     <VBox>
         <children>
-            <!--        <VBox>-->
-            <!--            <children>-->
-            <!--                <HBox VBox.vgrow="ALWAYS">-->
-            <!--                    <children>-->
             <GridPane fx:id="grdpnPlaylistMappig" hgap="5.0" maxWidth="1.7976931348623157E308">
                 <columnConstraints>
                     <ColumnConstraints minWidth="125.0"/>
@@ -52,6 +48,7 @@
             </GridPane>
             <Button fx:id="btnUseEdit" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
                     onAction="#toggleUseEdit" text="Use"/>
+            <Label fx:id="lblData"/>
         </children>
     </VBox>
 </TitledPane>

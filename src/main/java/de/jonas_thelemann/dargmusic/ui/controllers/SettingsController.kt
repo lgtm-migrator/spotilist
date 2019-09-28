@@ -2,7 +2,8 @@ package de.jonas_thelemann.dargmusic.ui.controllers
 
 import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings
 import de.jonas_thelemann.dargmusic.persistence.state.settings.youtube.YouTubeSettings
-import de.jonas_thelemann.dargmusic.providers.SpotifyProvider
+import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyProvider
+import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyUtil
 import de.jonas_thelemann.dargmusic.ui.DargmusicStage
 import de.jonas_thelemann.dargmusic.util.Etter
 import javafx.fxml.FXML
@@ -83,7 +84,7 @@ class SettingsController : Initializable {
 
     @FXML
     private fun openAuthorization() {
-        SpotifyProvider.openAuthorization()
+        SpotifyUtil.openAuthorization()
         DargmusicStage("../fxml/spotify/SpotifyAuthorizationCode.fxml", Modality.APPLICATION_MODAL, "Authorization Code")
                 .showStyled()
     }

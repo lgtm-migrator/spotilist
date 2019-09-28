@@ -8,10 +8,7 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
-import javafx.scene.control.Button
-import javafx.scene.control.ComboBox
-import javafx.scene.control.TextField
-import javafx.scene.control.TitledPane
+import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import java.net.URL
 import java.util.*
@@ -35,14 +32,16 @@ class PlaylistMappingController : Initializable {
     private lateinit var txtTargetId: TextField
     @FXML
     private lateinit var btnUseEdit: Button
+    @FXML
+    private lateinit var lblData: Label
 
     var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, newValue ->
         tldpnPlaylistMapping.text = newValue.name
         txtName.text = newValue.name
-        cmbSourceProvider.value = newValue.sourceProvider
-        txtSourceId.text = newValue.sourceId
-        cmbTargetProvider.value = newValue.targetProvider
-        txtTargetId.text = newValue.targetId
+        cmbSourceProvider.value = newValue.sourceResource.provider
+        txtSourceId.text = newValue.sourceResource.id
+        cmbTargetProvider.value = newValue.targetResource.provider
+        txtTargetId.text = newValue.targetResource.id
     }
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
@@ -55,8 +54,8 @@ class PlaylistMappingController : Initializable {
         }
 
         val cmbInputToEtterMap = mapOf<ComboBox<DargmusicProvider>, (DargmusicProvider) -> Unit>(
-                cmbSourceProvider to { it -> playlistMapping.sourceProvider = it },
-                cmbTargetProvider to { it -> playlistMapping.targetProvider = it }
+                cmbSourceProvider to { it -> playlistMapping.sourceResource.provider = it },
+                cmbTargetProvider to { it -> playlistMapping.targetResource.provider = it }
         )
 
         for ((combobox, etter) in cmbInputToEtterMap) {
@@ -69,8 +68,8 @@ class PlaylistMappingController : Initializable {
 
         val txtInputToEtterMap = mapOf<TextField, (String) -> Unit>(
                 txtName to { it -> playlistMapping.name = it },
-                txtSourceId to { it -> playlistMapping.sourceId = it },
-                txtTargetId to { it -> playlistMapping.targetId = it }
+                txtSourceId to { it -> playlistMapping.sourceResource.id = it },
+                txtTargetId to { it -> playlistMapping.targetResource.id = it }
         )
 
         for ((textField, etter) in txtInputToEtterMap) {
@@ -85,7 +84,7 @@ class PlaylistMappingController : Initializable {
 
     @FXML
     private fun delete() {
-        DargmusicState.data.playlistMappingData.playlistMappings.remove(playlistMapping)
+        DargmusicState.data.playlistMappings.remove(playlistMapping)
         MainApp.dashboardController.updatePlaylistMappings()
     }
 
@@ -94,9 +93,22 @@ class PlaylistMappingController : Initializable {
         if (btnUseEdit.text == "Use") {
             btnUseEdit.text = "Edit"
             grdpnPlaylistMappig.isDisable = true
+            lblData.text = "Updating data..."
+            updateData()
         } else if (btnUseEdit.text == "Edit") {
             btnUseEdit.text = "Use"
             grdpnPlaylistMappig.isDisable = false
+            lblData.text = ""
+        }
+    }
+
+    private fun updateData() {
+        for (resource in arrayOf(playlistMapping.sourceResource, playlistMapping.targetResource)) {
+            when (resource.provider) {
+//                DargmusicProvider.FILESYSTEM -> FileSystemProvider.getTracks(FileSystemProvider.getPlaylist(resource.id))
+//                DargmusicProvider.NONE -> NoneProvider.getTracks(Unit)
+//                DargmusicProvider.SPOTIFY -> SpotifyProvider.getTracks(SpotifyProvider.getPlaylist(resource.id))
+            }
         }
     }
 }

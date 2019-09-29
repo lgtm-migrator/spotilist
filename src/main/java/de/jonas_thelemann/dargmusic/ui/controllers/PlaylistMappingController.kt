@@ -103,12 +103,12 @@ class PlaylistMappingController : Initializable {
     }
 
     private fun updateData() {
-        for (resource in arrayOf(playlistMapping.sourceResource, playlistMapping.targetResource)) {
-            when (resource.provider) {
-//                DargmusicProvider.FILESYSTEM -> FileSystemProvider.getTracks(FileSystemProvider.getPlaylist(resource.id))
-//                DargmusicProvider.NONE -> NoneProvider.getTracks(Unit)
-//                DargmusicProvider.SPOTIFY -> SpotifyProvider.getTracks(SpotifyProvider.getPlaylist(resource.id))
-            }
-        }
+        val sourcePlaylist = DargmusicProvider.getPlaylist(playlistMapping.sourceResource)
+        val targetPlaylist = DargmusicProvider.getPlaylist(playlistMapping.targetResource)
+
+        lblData.text = "Source playlist name: " + sourcePlaylist.name +
+                "\nTarget playlist name: " + targetPlaylist.name +
+                "\nSource playlist track count: " + sourcePlaylist.tracks.size +
+                "\nTarget playlist track count: " + targetPlaylist.tracks.size
     }
 }

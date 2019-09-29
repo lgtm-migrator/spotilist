@@ -1,6 +1,5 @@
 package de.jonas_thelemann.dargmusic.providers.spotify
 
-import com.wrapper.spotify.SpotifyApi
 import com.wrapper.spotify.exceptions.SpotifyWebApiException
 import com.wrapper.spotify.exceptions.detailed.NotFoundException
 import com.wrapper.spotify.exceptions.detailed.UnauthorizedException
@@ -18,23 +17,10 @@ import java.io.IOException
 
 
 object SpotifyProvider : IDargmusicProviderAuthorizable {
-    val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
-            .setClientId(DargmusicState.settings.spotifySettings.clientId)
-            .setClientSecret(DargmusicState.settings.spotifySettings.clientSecret)
-            .setRedirectUri(DargmusicState.settings.spotifySettings.redirectUri)
-    var spotifyApi: SpotifyApi = spotifyApiBuilder.build()
-
-    init {
-        if (DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials.accessToken != "") {
-            spotifyApi = spotifyApiBuilder
-                    .setAccessToken(DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials.accessToken)
-                    .build()
-        }
-    }
 
     override fun getPlaylist(playlistId: String): Playlist {
-        val spotifyPlaylist = spotifyApi.getPlaylist(playlistId).build().execute()
-        val spotifyPlaylistTracks = SpotifyUtil.getAllPagingItems(GetPlaylistsTracksRequest.Builder(spotifyApi.accessToken))
+        val spotifyPlaylistName = SpotifyUtil.spotifyApi.getPlaylist(playlistId).build().execute().name
+        val spotifyPlaylistTracks = SpotifyUtil.getAllPagingItems(GetPlaylistsTracksRequest.Builder(SpotifyUtil.spotifyApi.accessToken).playlist_id(playlistId))
         val playlistTracks = arrayListOf<Track>()
 
         spotifyPlaylistTracks.forEach { spotifyPlaylistTrack: PlaylistTrack ->
@@ -53,7 +39,7 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
             playlistTracks.add(Track(trackAlbum, trackAlbumArtists, trackDurationMs, trackName))
         }
 
-        return Playlist(spotifyPlaylist.name, playlistTracks)
+        return Playlist(spotifyPlaylistName, playlistTracks)
     }
 
     override fun isPlaylistIdValid(playlistId: String): Boolean {
@@ -64,7 +50,7 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
         }
 
         return try {
-            spotifyApi.getPlaylist(playlistId).build().execute()
+            SpotifyUtil.spotifyApi.getPlaylist(playlistId).build().execute()
             true
         } catch (e: IOException) {
             LogManager.getLogger().error(errorMessage, e)
@@ -88,7 +74,7 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
         var id = String()
 
         try {
-            id = spotifyApi.currentUsersProfile.build().execute().id
+            id = SpotifyUtil.spotifyApi.currentUsersProfile.build().execute().id
         } catch (e: UnauthorizedException) {
             LogManager.getLogger().debug("Access to the Spotify API was unauthorized. Check the access credentials!")
         }

@@ -1,5 +1,6 @@
 package de.jonas_thelemann.dargmusic.providers.spotify
 
+import com.wrapper.spotify.SpotifyApi
 import com.wrapper.spotify.requests.data.IPagingRequestBuilder
 import de.jonas_thelemann.dargmusic.persistence.state.DargmusicState
 import de.jonas_thelemann.dargmusic.persistence.state.data.providers.spotify.SpotifyData
@@ -7,9 +8,22 @@ import java.awt.Desktop
 import java.time.Instant
 
 object SpotifyUtil {
+    val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
+            .setClientId(DargmusicState.settings.spotifySettings.clientId)
+            .setClientSecret(DargmusicState.settings.spotifySettings.clientSecret)
+            .setRedirectUri(DargmusicState.settings.spotifySettings.redirectUri)
+    var spotifyApi: SpotifyApi = spotifyApiBuilder.build()
+
+    init {
+        if (DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials.accessToken != "") {
+            spotifyApi = spotifyApiBuilder
+                    .setAccessToken(DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials.accessToken)
+                    .build()
+        }
+    }
 
     fun openAuthorization() {
-        val uri = SpotifyProvider.spotifyApi.authorizationCodeUri()
+        val uri = spotifyApi.authorizationCodeUri()
                 .redirect_uri(DargmusicState.settings.spotifySettings.redirectUri)
 //                .scope("playlist-modify-private playlist-read-private user-read-private")
                 .state("dargmusic")
@@ -34,7 +48,7 @@ object SpotifyUtil {
             return
         }
 
-        DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials = SpotifyProvider.spotifyApi.authorizationCode(authorizationCode)
+        DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials = spotifyApi.authorizationCode(authorizationCode)
                 .build().execute()
     }
 

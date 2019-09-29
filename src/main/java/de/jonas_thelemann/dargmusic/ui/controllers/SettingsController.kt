@@ -2,7 +2,6 @@ package de.jonas_thelemann.dargmusic.ui.controllers
 
 import de.jonas_thelemann.dargmusic.persistence.state.settings.spotify.SpotifySettings
 import de.jonas_thelemann.dargmusic.persistence.state.settings.youtube.YouTubeSettings
-import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyProvider
 import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyUtil
 import de.jonas_thelemann.dargmusic.ui.DargmusicStage
 import de.jonas_thelemann.dargmusic.util.Etter
@@ -57,7 +56,7 @@ class SettingsController : Initializable {
                 }
 
                 if (textField == spotifyRedirectUriTextField) {
-                    SpotifyProvider.spotifyApi = SpotifyProvider.spotifyApiBuilder.build()
+                    SpotifyUtil.spotifyApi = SpotifyUtil.spotifyApiBuilder.build()
                 }
             }
         }

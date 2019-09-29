@@ -13,9 +13,9 @@ data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(
     fun validate(): Boolean {
         return name != ""
                 && sourceResource.provider != DargmusicProvider.NONE
-                && DargmusicProvider.isValid(sourceResource)
+                && DargmusicProvider.isPlaylistMappingValid(sourceResource)
                 && targetResource.provider != DargmusicProvider.NONE
-                && DargmusicProvider.isValid(targetResource)
+                && DargmusicProvider.isPlaylistMappingValid(targetResource)
     }
 
     override fun equals(other: Any?): Boolean {

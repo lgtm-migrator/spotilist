@@ -46,7 +46,7 @@ enum class DargmusicProvider(val type: IDargmusicProvider) {
             }
         }
 
-        fun isValid(pmResource: PlaylistMappingResource): Boolean {
+        fun isPlaylistMappingValid(pmResource: PlaylistMappingResource): Boolean {
             return when (pmResource.provider) {
                 FILESYSTEM -> FileSystemProvider.isPlaylistIdValid(pmResource.id)
                 MP3TAG -> Mp3TagProvider.isPlaylistIdValid(pmResource.id)

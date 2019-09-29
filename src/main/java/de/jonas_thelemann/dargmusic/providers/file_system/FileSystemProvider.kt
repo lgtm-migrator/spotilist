@@ -1,4 +1,4 @@
-package de.jonas_thelemann.dargmusic.providers.filesystem
+package de.jonas_thelemann.dargmusic.providers.file_system
 
 import com.mpatric.mp3agic.ID3v24Tag
 import com.mpatric.mp3agic.Mp3File

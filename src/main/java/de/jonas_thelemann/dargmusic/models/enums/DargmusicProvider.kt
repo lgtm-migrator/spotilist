@@ -4,7 +4,7 @@ import de.jonas_thelemann.dargmusic.models.PlaylistMappingResource
 import de.jonas_thelemann.dargmusic.models.music.Playlist
 import de.jonas_thelemann.dargmusic.providers.IDargmusicProvider
 import de.jonas_thelemann.dargmusic.providers.NoneProvider
-import de.jonas_thelemann.dargmusic.providers.filesystem.FileSystemProvider
+import de.jonas_thelemann.dargmusic.providers.file_system.FileSystemProvider
 import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyProvider
 import java.util.*
 

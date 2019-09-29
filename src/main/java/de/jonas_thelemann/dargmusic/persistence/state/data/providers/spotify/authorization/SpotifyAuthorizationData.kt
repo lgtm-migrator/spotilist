@@ -4,6 +4,7 @@ import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredential
 import de.jonas_thelemann.dargmusic.providers.spotify.SpotifyUtil
 import java.time.Instant
 import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -23,26 +24,35 @@ object SpotifyAuthorizationData {
             }
 
             if (authorizationStarted != 0L) {
-                val secondsRemaining = Instant.ofEpochSecond(authorizationStarted).plusSeconds(newValue.expiresIn.toLong()).minusSeconds(Instant.now().epochSecond).epochSecond
-                refreshScheduler.schedule({
-                    authorizationStarted = Instant.now().epochSecond
-                    authorizationCodeCredentials = SpotifyUtil.spotifyApi.authorizationCodeRefresh().build().execute()
-                }, secondsRemaining, TimeUnit.SECONDS)
+                scheduleAuthorizationRefresh(authorizationStarted, newValue)
             }
         }
     }
+
     var authorizationStarted: Long by Delegates.observable(0L) { _, _, newValue ->
         if (SpotifyUtil.spotifyApi.refreshToken != null) {
-            val secondsRemaining = Instant.ofEpochSecond(newValue).plusSeconds(authorizationCodeCredentials.expiresIn.toLong()).minusSeconds(Instant.now().epochSecond).epochSecond
-            refreshScheduler.schedule({
-                authorizationStarted = Instant.now().epochSecond
-                authorizationCodeCredentials = SpotifyUtil.spotifyApi.authorizationCodeRefresh().build().execute()
-            }, secondsRemaining, TimeUnit.SECONDS)
+            scheduleAuthorizationRefresh(newValue, authorizationCodeCredentials)
         }
     }
+
     private var refreshTokenCopy by Delegates.observable("") { _, _, newValue ->
         SpotifyUtil.spotifyApi = SpotifyUtil.spotifyApiBuilder
                 .setRefreshToken(newValue)
                 .build()
+    }
+
+    private lateinit var scheduleFuture: ScheduledFuture<*>
+
+    private fun scheduleAuthorizationRefresh(authorizationStartedNew: Long, authorizationCodeCredentialsNew: AuthorizationCodeCredentials) {
+        val secondsRemaining = Instant.ofEpochSecond(authorizationStartedNew).plusSeconds(authorizationCodeCredentialsNew.expiresIn.toLong()).minusSeconds(Instant.now().epochSecond).epochSecond
+
+        if (::scheduleFuture.isInitialized) {
+            scheduleFuture.cancel(false)
+        }
+
+        scheduleFuture = refreshScheduler.schedule({
+            authorizationStarted = Instant.now().epochSecond
+            authorizationCodeCredentials = SpotifyUtil.spotifyApi.authorizationCodeRefresh().build().execute()
+        }, secondsRemaining, TimeUnit.SECONDS)
     }
 }

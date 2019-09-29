@@ -24,7 +24,6 @@ object SpotifyUtil {
 
     fun openAuthorization() {
         val uri = spotifyApi.authorizationCodeUri()
-                .redirect_uri(DargmusicState.settings.spotifySettings.redirectUri)
 //                .scope("playlist-modify-private playlist-read-private user-read-private")
                 .state("dargmusic")
                 .build().execute()

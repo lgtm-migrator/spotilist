@@ -1,9 +1,5 @@
 package de.jonas_thelemann.dargmusic.providers.file_system
 
-import com.mpatric.mp3agic.ID3v24Tag
-import com.mpatric.mp3agic.Mp3File
-import de.jonas_thelemann.dargmusic.models.music.Album
-import de.jonas_thelemann.dargmusic.models.music.Artist
 import de.jonas_thelemann.dargmusic.models.music.Playlist
 import de.jonas_thelemann.dargmusic.models.music.Track
 import de.jonas_thelemann.dargmusic.providers.IDargmusicProvider
@@ -15,20 +11,8 @@ object FileSystemProvider : IDargmusicProvider {
         val playlistName = path.fileName.toString()
         val playlistTracks: MutableList<Track> = mutableListOf()
 
-        path.toFile().listFiles()!!.forEach { file ->
-            val mp3File = Mp3File(file)
-            val id3v2Tag = if (mp3File.hasId3v2Tag()) {
-                mp3File.id3v2Tag
-            } else {
-                ID3v24Tag()
-            }
-
-            val trackAlbum = Album(name = id3v2Tag.album)
-            val trackArtists = listOf(Artist(name = id3v2Tag.artist))
-            val trackDurationMs = mp3File.lengthInMilliseconds
-            val trackName = id3v2Tag.title
-
-            playlistTracks.add(Track(trackAlbum, trackArtists, trackDurationMs.toInt(), trackName))
+        path.toFile().listFiles { file -> file.isFile }!!.forEach { file ->
+            playlistTracks.add(Track(name = file.nameWithoutExtension))
         }
 
         return Playlist(playlistName, playlistTracks)

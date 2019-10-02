@@ -24,4 +24,10 @@ object Util {
 
         return "Playlist Mapping " + (maxIndex + 1)
     }
+
+    fun shrinkMultipleWhitespaces(string: String): String =
+            Pattern
+                    .compile("[ ]{2,}")
+                    .matcher(string)
+                    .replaceAll(" ")
 }

@@ -17,7 +17,7 @@ import kotlin.system.exitProcess
 object Persistence {
     private val appDataDirectory: Path
         get() {
-            val os = System.getProperty("os.name").toLowerCase()
+            val os = System.getProperty("os.name").lowercase()
 
             return if (os.contains("win")) {
                 Paths.get(System.getenv("AppData"), "Dargmusic")

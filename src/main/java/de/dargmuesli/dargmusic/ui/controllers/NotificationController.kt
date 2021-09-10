@@ -5,7 +5,6 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Label
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 class NotificationController : Initializable {
 

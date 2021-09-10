@@ -7,7 +7,6 @@ import de.dargmuesli.dargmusic.providers.NoneProvider
 import de.dargmuesli.dargmusic.providers.file_system.FileSystemProvider
 import de.dargmuesli.dargmusic.providers.mp3tag.Mp3TagProvider
 import de.dargmuesli.dargmusic.providers.spotify.SpotifyProvider
-import java.util.*
 
 /**
  * An enumeration of all possible module types.

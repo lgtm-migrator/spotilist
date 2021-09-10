@@ -20,7 +20,7 @@ class DargmusicStage(fxmlPath: String,
                      minWidth: Double = Control.USE_COMPUTED_SIZE) : Stage() {
     init {
         try {
-            val dashboard = FXMLLoader.load<Parent>(javaClass.getResource(fxmlPath))
+            val dashboard = FXMLLoader.load<Parent>(MainApp::class.java.getResource(fxmlPath))
             val scene = Scene(dashboard)
 
             if (minHeight != Control.USE_COMPUTED_SIZE) {
@@ -33,7 +33,7 @@ class DargmusicStage(fxmlPath: String,
 
             this.scene = scene
             this.title = MainApp.APPLICATION_TITLE + " - " + title
-            this.icons.add(Image(javaClass.getResourceAsStream("../icons/icon.png")))
+            this.icons.add(Image(javaClass.getResourceAsStream("/de/dargmuesli/dargmusic/icons/icon.png")))
             this.isAlwaysOnTop = isAlwaysOnTop
             this.initModality(modality)
 
@@ -47,20 +47,10 @@ class DargmusicStage(fxmlPath: String,
         }
     }
 
-    fun showStyled(cssPath: String = "../css/styles.css", andWait: Boolean = false) {
-        this.scene.stylesheets.add(javaClass.getResource(cssPath).toExternalForm())
-
-        if (andWait) {
-            this.showAndWait()
-        } else {
-            this.show()
-        }
-    }
-
     companion object {
         internal fun makeDargmusicStage(stage: Stage) {
             stage.title = MainApp.APPLICATION_TITLE
-            stage.icons.add(Image(MainApp().javaClass.getResourceAsStream("icons/icon.png")))
+            stage.icons.add(Image(MainApp().javaClass.getResourceAsStream("/de/dargmuesli/dargmusic/icons/icon.png")))
         }
     }
 }

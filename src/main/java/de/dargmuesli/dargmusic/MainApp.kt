@@ -28,9 +28,9 @@ class MainApp : Application() {
         }
 
         try {
-            val dashboardLoader = FXMLLoader(javaClass.getResource("fxml/Dashboard.fxml"))
+            val dashboardLoader = FXMLLoader(javaClass.getResource("/de/dargmuesli/dargmusic/fxml/Dashboard.fxml"))
             val dashboard = dashboardLoader.load<Parent>()
-            dashboardController = dashboardLoader.getController<DashboardController>()
+            dashboardController = dashboardLoader.getController()
 
             val scene = Scene(dashboard)
 

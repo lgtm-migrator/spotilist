@@ -22,7 +22,6 @@ object DargmusicNotification {
 
     private fun displayPopup(text: String, title: String = "Notification") {
         NotificationController.notifications.add(text)
-        DargmusicStage("../fxml/Notification.fxml", Modality.APPLICATION_MODAL, title, true)
-                .showStyled("../css/styles.css", true)
+        DargmusicStage("/de/dargmuesli/dargmusic/fxml/Notification.fxml", Modality.APPLICATION_MODAL, title, true).showAndWait()
     }
 }

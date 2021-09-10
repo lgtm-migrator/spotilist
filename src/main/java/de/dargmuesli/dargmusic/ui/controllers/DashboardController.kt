@@ -1,5 +1,6 @@
 package de.dargmuesli.dargmusic.ui.controllers
 
+import de.dargmuesli.dargmusic.MainApp
 import de.dargmuesli.dargmusic.models.PlaylistMapping
 import de.dargmuesli.dargmusic.persistence.state.DargmusicState
 import de.dargmuesli.dargmusic.ui.DargmusicStage
@@ -28,14 +29,13 @@ class DashboardController : Initializable {
 
     @FXML
     private fun menuFileSettingsAction() {
-        DargmusicStage("../fxml/Settings.fxml", Modality.APPLICATION_MODAL, "Settings")
-                .showStyled()
+        DargmusicStage("/de/dargmuesli/dargmusic/fxml/Settings.fxml", Modality.APPLICATION_MODAL, "Settings").show()
     }
 
     fun updatePlaylistMappings() {
         accPlaylistMappings.panes.clear()
         DargmusicState.data.playlistMappings.forEach {
-            val fxmlLoader = FXMLLoader(javaClass.getResource("../../fxml/PlaylistMapping.fxml"))
+            val fxmlLoader = FXMLLoader(MainApp::class.java.getResource("/de/dargmuesli/dargmusic/fxml/PlaylistMapping.fxml"))
 
             accPlaylistMappings.panes.add(fxmlLoader.load())
 

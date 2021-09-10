@@ -2,7 +2,6 @@ package de.dargmuesli.dargmusic.persistence
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.youtube.model.PlaylistItem
 import de.dargmuesli.dargmusic.persistence.state.DargmusicStateWrapper
 import de.dargmuesli.dargmusic.ui.DargmusicNotification
@@ -68,7 +67,7 @@ object Persistence {
 
         for (key in properties.stringPropertyNames()) {
             try {
-                playlistItems[key] = JacksonFactory().createJsonParser(properties[key].toString()).parse(PlaylistItem::class.java)
+                playlistItems[key] = ObjectMapper().readValue(properties[key].toString(), PlaylistItem::class.java)
             } catch (e: IOException) {
                 println("Could not parse \"" + properties[key].toString() + "\".")
             }

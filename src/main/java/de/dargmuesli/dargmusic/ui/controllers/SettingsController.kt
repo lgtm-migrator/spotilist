@@ -84,6 +84,5 @@ class SettingsController : Initializable {
     @FXML
     private fun openAuthorization() {
         SpotifyUtil.openAuthorization()
-        DargmusicStage("/de/dargmuesli/dargmusic/fxml/spotify/SpotifyAuthorizationCode.fxml", Modality.APPLICATION_MODAL, "Authorization Code").show()
     }
 }

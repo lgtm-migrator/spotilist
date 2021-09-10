@@ -69,18 +69,10 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
     }
 
     override fun isAuthorized(): Boolean {
-        if (DargmusicState.data.spotifyData.authorizationData.authorizationCodeCredentials.accessToken == null) {
+        if (DargmusicState.data.spotifyData.accessToken == null) {
             return false
         }
 
-        var id = String()
-
-        try {
-            id = SpotifyUtil.spotifyApi.currentUsersProfile.build().execute().id
-        } catch (e: UnauthorizedException) {
-            LogManager.getLogger().debug("Access to the Spotify API was unauthorized. Check the access credentials!")
-        }
-
-        return id != ""
+        return true
     }
 }

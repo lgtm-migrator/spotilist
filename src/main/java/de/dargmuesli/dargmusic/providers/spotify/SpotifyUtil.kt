@@ -28,7 +28,7 @@ object SpotifyUtil {
                 .state("dargmusic")
                 .build().execute()
 
-        val os = System.getProperty("os.name").toLowerCase()
+        val os = System.getProperty("os.name").lowercase()
         val runtime = Runtime.getRuntime()
 
         SpotifyData.authorizationData.authorizationStarted = Instant.now().epochSecond

@@ -1,7 +1,7 @@
 package de.dargmuesli.dargmusic.providers.spotify
 
 import com.wrapper.spotify.SpotifyApi
-import com.wrapper.spotify.requests.data.IPagingRequestBuilder
+import com.wrapper.spotify.requests.data.AbstractDataPagingRequest
 import de.dargmuesli.dargmusic.persistence.state.DargmusicState
 import de.dargmuesli.dargmusic.persistence.state.data.providers.spotify.SpotifyData
 import java.awt.Desktop
@@ -51,12 +51,12 @@ object SpotifyUtil {
                 .build().execute()
     }
 
-    fun <T : Any?> getAllPagingItems(requestBuilder: IPagingRequestBuilder<T, *>): List<T> {
-        val list = arrayListOf<T>()
+    fun <T> getAllPagingItems(requestBuilder: AbstractDataPagingRequest.Builder<T, *>): List<T> {
+        val list = mutableListOf<T>()
 
         do {
             val paging = requestBuilder.build().execute()
-            list.addAll(paging.items.asList())
+            list.plus(paging.items)
             requestBuilder
                     .offset(paging.offset + paging.limit)
         } while (paging.next != null)

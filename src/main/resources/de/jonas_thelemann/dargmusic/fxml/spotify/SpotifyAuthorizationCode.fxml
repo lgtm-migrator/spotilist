@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="10.0" stylesheets="@../../css/styles.css"
       xmlns="http://javafx.com/javafx/8.0.202-ea"
-      fx:controller="de.jonas_thelemann.dargmusic.ui.controllers.spotify.SpotifyAuthorizationCodeController">
+      fx:controller="de.dargmuesli.dargmusic.ui.controllers.spotify.SpotifyAuthorizationCodeController">
     <HBox alignment="CENTER" spacing="5.0">
         <children>
             <Label text="Authorization Code"/>

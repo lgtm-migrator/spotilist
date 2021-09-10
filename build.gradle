@@ -36,5 +36,5 @@ compileTestKotlin {
     }
 }
 
-mainClassName = 'de.jonas_thelemann.dargmusic.MainApp'
+mainClassName = 'de.dargmuesli.dargmusic.MainApp'
 version '0.1.0'

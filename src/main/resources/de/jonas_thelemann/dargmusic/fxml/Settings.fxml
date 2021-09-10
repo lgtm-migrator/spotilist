@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" minWidth="500.0" stylesheets="@../css/styles.css"
             xmlns="http://javafx.com/javafx/8.0.221"
-            fx:controller="de.jonas_thelemann.dargmusic.ui.controllers.SettingsController">
+            fx:controller="de.dargmuesli.dargmusic.ui.controllers.SettingsController">
     <children>
         <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
               AnchorPane.topAnchor="10.0">

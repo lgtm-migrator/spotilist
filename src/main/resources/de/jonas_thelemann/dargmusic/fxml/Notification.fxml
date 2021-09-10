@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <HBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" minHeight="100.0" minWidth="250.0"
       stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.221"
-      fx:controller="de.jonas_thelemann.dargmusic.ui.controllers.NotificationController">
+      fx:controller="de.dargmuesli.dargmusic.ui.controllers.NotificationController">
     <children>
         <Label fx:id="lblNotification" stylesheets="@../css/styles.css" text="Dies ist ein Text"/>
     </children>

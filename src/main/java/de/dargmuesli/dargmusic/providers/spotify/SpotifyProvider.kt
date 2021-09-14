@@ -28,9 +28,14 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
             val track = spotifyPlaylistTrack.track as com.wrapper.spotify.model_objects.specification.Track
             val trackAlbumType = AlbumType.valueOf(track.album.albumType.name)
             val trackAlbumArtists: MutableList<Artist> = mutableListOf()
+            val trackArtists: MutableList<Artist> = mutableListOf()
 
             track.album.artists.forEach { artistSimplified ->
                 trackAlbumArtists.add(Artist(name = artistSimplified.name))
+            }
+
+            track.artists.forEach { artistSimplified ->
+                trackArtists.add(Artist(name = artistSimplified.name))
             }
 
             val trackAlbumName: String = track.album.name
@@ -38,7 +43,7 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
             val trackDurationMs = spotifyPlaylistTrack.track.durationMs
             val trackName = spotifyPlaylistTrack.track.name
 
-            playlistTracks.add(Track(trackAlbum, trackAlbumArtists, trackDurationMs, trackName))
+            playlistTracks.add(Track(trackAlbum, trackArtists, trackDurationMs, trackName))
         }
 
         return Playlist(spotifyPlaylistName, playlistTracks)

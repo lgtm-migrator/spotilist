@@ -18,20 +18,28 @@ class PlaylistMappingController : Initializable {
 
     @FXML
     private lateinit var tldpnPlaylistMapping: TitledPane
+
     @FXML
     private lateinit var grdpnPlaylistMappig: GridPane
+
     @FXML
     private lateinit var txtName: TextField
+
     @FXML
     private lateinit var cmbSourceProvider: ComboBox<DargmusicProvider>
+
     @FXML
     private lateinit var txtSourceId: TextField
+
     @FXML
     private lateinit var cmbTargetProvider: ComboBox<DargmusicProvider>
+
     @FXML
     private lateinit var txtTargetId: TextField
+
     @FXML
     private lateinit var btnUseEdit: Button
+
     @FXML
     private lateinit var lblData: Label
 

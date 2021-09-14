@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<TitledPane xmlns:fx="http://javafx.com/fxml/1" fx:id="tldpnPlaylistMapping" stylesheets="/de/dargmuesli/dargmusic/css/styles.css"
+<TitledPane xmlns:fx="http://javafx.com/fxml/1" fx:id="tldpnPlaylistMapping"
+            stylesheets="/de/dargmuesli/dargmusic/css/styles.css"
             text="PLAYLIST_MAPPING_TITLE" xmlns="http://javafx.com/javafx"
             fx:controller="de.dargmuesli.dargmusic.ui.controllers.PlaylistMappingController">
     <graphic>

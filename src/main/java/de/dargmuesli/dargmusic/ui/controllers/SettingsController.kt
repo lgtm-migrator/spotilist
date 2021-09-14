@@ -3,13 +3,11 @@ package de.dargmuesli.dargmusic.ui.controllers
 import de.dargmuesli.dargmusic.persistence.state.settings.spotify.SpotifySettings
 import de.dargmuesli.dargmusic.persistence.state.settings.youtube.YouTubeSettings
 import de.dargmuesli.dargmusic.providers.spotify.SpotifyUtil
-import de.dargmuesli.dargmusic.ui.DargmusicStage
 import de.dargmuesli.dargmusic.util.Etter
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
-import javafx.stage.Modality
 import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
@@ -21,12 +19,16 @@ class SettingsController : Initializable {
 
     @FXML
     private lateinit var spotifyClientIdTextField: TextField
+
     @FXML
     private lateinit var spotifyClientSecretTextField: TextField
+
     @FXML
     private lateinit var spotifyRedirectUriTextField: TextField
+
     @FXML
     private lateinit var btnOpenAuthorization: Button
+
     @FXML
     private lateinit var youTubeApiKeyTextField: TextField
 

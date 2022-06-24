@@ -12,5 +12,5 @@ open module de.dargmuesli.dargmusic {
     requires mp3agic;
     requires org.apache.logging.log4j;
     requires org.kordamp.ikonli.javafx;
-    requires spotify.web.api.java;
+    requires se.michaelthelin.spotify;
 }

@@ -1,9 +1,9 @@
 package de.dargmuesli.dargmusic.providers.spotify
 
-import com.wrapper.spotify.exceptions.SpotifyWebApiException
-import com.wrapper.spotify.exceptions.detailed.NotFoundException
-import com.wrapper.spotify.exceptions.detailed.UnauthorizedException
-import com.wrapper.spotify.model_objects.specification.PlaylistTrack
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException
+import se.michaelthelin.spotify.exceptions.detailed.NotFoundException
+import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack
 import de.dargmuesli.dargmusic.models.enums.AlbumType
 import de.dargmuesli.dargmusic.models.music.Album
 import de.dargmuesli.dargmusic.models.music.Artist
@@ -25,7 +25,7 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
         val playlistTracks = arrayListOf<Track>()
 
         spotifyPlaylistTracks.forEach { spotifyPlaylistTrack: PlaylistTrack ->
-            val track = spotifyPlaylistTrack.track as com.wrapper.spotify.model_objects.specification.Track
+            val track = spotifyPlaylistTrack.track as se.michaelthelin.spotify.model_objects.specification.Track
             val trackAlbumType = AlbumType.valueOf(track.album.albumType.name)
             val trackAlbumArtists: MutableList<Artist> = mutableListOf()
             val trackArtists: MutableList<Artist> = mutableListOf()

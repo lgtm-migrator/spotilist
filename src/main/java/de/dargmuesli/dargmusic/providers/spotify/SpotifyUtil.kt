@@ -1,7 +1,7 @@
 package de.dargmuesli.dargmusic.providers.spotify
 
-import com.wrapper.spotify.SpotifyApi
-import com.wrapper.spotify.requests.data.AbstractDataPagingRequest
+import se.michaelthelin.spotify.SpotifyApi
+import se.michaelthelin.spotify.requests.data.AbstractDataPagingRequest
 import de.dargmuesli.dargmusic.persistence.state.DargmusicState
 
 object SpotifyUtil {

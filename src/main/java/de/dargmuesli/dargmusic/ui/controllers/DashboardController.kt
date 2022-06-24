@@ -35,7 +35,8 @@ class DashboardController : Initializable {
     fun updatePlaylistMappings() {
         accPlaylistMappings.panes.clear()
         DargmusicState.data.playlistMappings.forEach {
-            val fxmlLoader = FXMLLoader(MainApp::class.java.getResource("/de/dargmuesli/dargmusic/fxml/PlaylistMapping.fxml"))
+            val fxmlLoader =
+                FXMLLoader(MainApp::class.java.getResource("/de/dargmuesli/dargmusic/fxml/PlaylistMapping.fxml"))
 
             accPlaylistMappings.panes.add(fxmlLoader.load())
 

@@ -12,12 +12,14 @@ import org.apache.logging.log4j.LogManager
 
 import java.io.IOException
 
-class DargmusicStage(fxmlPath: String,
-                     modality: Modality,
-                     title: String,
-                     isAlwaysOnTop: Boolean = false,
-                     minHeight: Double = Control.USE_COMPUTED_SIZE,
-                     minWidth: Double = Control.USE_COMPUTED_SIZE) : Stage() {
+class DargmusicStage(
+    fxmlPath: String,
+    modality: Modality,
+    title: String,
+    isAlwaysOnTop: Boolean = false,
+    minHeight: Double = Control.USE_COMPUTED_SIZE,
+    minWidth: Double = Control.USE_COMPUTED_SIZE
+) : Stage() {
     init {
         try {
             val dashboard = FXMLLoader.load<Parent>(MainApp::class.java.getResource(fxmlPath))

@@ -1,9 +1,5 @@
 package de.dargmuesli.dargmusic.providers.spotify
 
-import com.wrapper.spotify.exceptions.SpotifyWebApiException
-import com.wrapper.spotify.exceptions.detailed.NotFoundException
-import com.wrapper.spotify.exceptions.detailed.UnauthorizedException
-import com.wrapper.spotify.model_objects.specification.PlaylistTrack
 import de.dargmuesli.dargmusic.models.enums.AlbumType
 import de.dargmuesli.dargmusic.models.music.Album
 import de.dargmuesli.dargmusic.models.music.Artist
@@ -12,6 +8,10 @@ import de.dargmuesli.dargmusic.models.music.Track
 import de.dargmuesli.dargmusic.persistence.state.DargmusicState
 import de.dargmuesli.dargmusic.providers.IDargmusicProviderAuthorizable
 import org.apache.logging.log4j.LogManager
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException
+import se.michaelthelin.spotify.exceptions.detailed.NotFoundException
+import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack
 import java.io.IOException
 
 
@@ -20,12 +20,12 @@ object SpotifyProvider : IDargmusicProviderAuthorizable {
     override fun getPlaylist(playlistId: String): Playlist {
         val spotifyPlaylistName = SpotifyUtil.spotifyApi.getPlaylist(playlistId).build().execute().name
         val spotifyPlaylistTracks = SpotifyUtil.getAllPagingItems(
-                SpotifyUtil.spotifyApi.getPlaylistsItems(playlistId)
+            SpotifyUtil.spotifyApi.getPlaylistsItems(playlistId)
         )
         val playlistTracks = arrayListOf<Track>()
 
         spotifyPlaylistTracks.forEach { spotifyPlaylistTrack: PlaylistTrack ->
-            val track = spotifyPlaylistTrack.track as com.wrapper.spotify.model_objects.specification.Track
+            val track = spotifyPlaylistTrack.track as se.michaelthelin.spotify.model_objects.specification.Track
             val trackAlbumType = AlbumType.valueOf(track.album.albumType.name)
             val trackAlbumArtists: MutableList<Artist> = mutableListOf()
             val trackArtists: MutableList<Artist> = mutableListOf()

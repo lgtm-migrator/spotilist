@@ -26,8 +26,8 @@ object Util {
     }
 
     fun shrinkMultipleWhitespaces(string: String): String =
-            Pattern
-                    .compile("[ ]{2,}")
-                    .matcher(string)
-                    .replaceAll(" ")
+        Pattern
+            .compile("[ ]{2,}")
+            .matcher(string)
+            .replaceAll(" ")
 }

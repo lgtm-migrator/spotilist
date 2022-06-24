@@ -4,11 +4,13 @@ import de.dargmuesli.dargmusic.models.enums.DargmusicProvider
 import de.dargmuesli.dargmusic.persistence.state.DargmusicState
 import de.dargmuesli.dargmusic.util.Util
 
-data class PlaylistMapping(var name: String = Util.getUnusedPlaylistMappingName(DargmusicState.data.playlistMappings),
-                           var sourceResource: PlaylistMappingResource = PlaylistMappingResource(),
-                           var targetResource: PlaylistMappingResource = PlaylistMappingResource(),
-                           var blacklistSource: Array<String> = arrayOf(),
-                           var blacklistTarget: Array<String> = arrayOf()) {
+data class PlaylistMapping(
+    var name: String = Util.getUnusedPlaylistMappingName(DargmusicState.data.playlistMappings),
+    var sourceResource: PlaylistMappingResource = PlaylistMappingResource(),
+    var targetResource: PlaylistMappingResource = PlaylistMappingResource(),
+    var blacklistSource: Array<String> = arrayOf(),
+    var blacklistTarget: Array<String> = arrayOf()
+) {
 
     fun validate(): Boolean {
         return name != ""

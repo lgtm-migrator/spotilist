@@ -1,27 +1,27 @@
 package de.dargmuesli.dargmusic.providers.spotify
 
-import com.wrapper.spotify.SpotifyApi
-import com.wrapper.spotify.requests.data.AbstractDataPagingRequest
 import de.dargmuesli.dargmusic.persistence.state.DargmusicState
+import se.michaelthelin.spotify.SpotifyApi
+import se.michaelthelin.spotify.requests.data.AbstractDataPagingRequest
 
 object SpotifyUtil {
     val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
-            .setClientId(DargmusicState.settings.spotifySettings.clientId)
-            .setClientSecret(DargmusicState.settings.spotifySettings.clientSecret)
-            .setRedirectUri(DargmusicState.settings.spotifySettings.redirectUri)
+        .setClientId(DargmusicState.settings.spotifySettings.clientId)
+        .setClientSecret(DargmusicState.settings.spotifySettings.clientSecret)
+        .setRedirectUri(DargmusicState.settings.spotifySettings.redirectUri)
     var spotifyApi: SpotifyApi = spotifyApiBuilder.build()
 
     init {
         if (DargmusicState.data.spotifyData.accessToken != "") {
             spotifyApi = spotifyApiBuilder
-                    .setAccessToken(DargmusicState.data.spotifyData.accessToken)
-                    .build()
+                .setAccessToken(DargmusicState.data.spotifyData.accessToken)
+                .build()
         }
     }
 
     fun openAuthorization() {
         val authorizationCode = spotifyApi.clientCredentials()
-                .build().execute()
+            .build().execute()
 
         DargmusicState.data.spotifyData.accessToken = authorizationCode.accessToken
     }
@@ -33,7 +33,7 @@ object SpotifyUtil {
             val paging = requestBuilder.build().execute()
             list.addAll(paging.items)
             requestBuilder
-                    .offset(paging.offset + paging.limit)
+                .offset(paging.offset + paging.limit)
         } while (paging.next != null)
 
         return list

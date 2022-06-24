@@ -32,7 +32,8 @@ object Persistence {
     fun loadSettings() {
         if (Files.exists(settingsFile)) {
             try {
-                DargmusicStateWrapper.state = jackson.readValue(String(Files.readAllBytes(settingsFile)), DargmusicStateWrapper.javaClass).state
+                DargmusicStateWrapper.state =
+                    jackson.readValue(String(Files.readAllBytes(settingsFile)), DargmusicStateWrapper.javaClass).state
             } catch (e: Exception) {
                 DargmusicNotification.displayError("Loading application settings failed!", e)
                 exitProcess(0)

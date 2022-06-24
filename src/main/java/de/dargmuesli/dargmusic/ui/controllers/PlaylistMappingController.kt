@@ -62,8 +62,8 @@ class PlaylistMappingController : Initializable {
         }
 
         val cmbInputToEtterMap = mapOf<ComboBox<DargmusicProvider>, (DargmusicProvider) -> Unit>(
-                cmbSourceProvider to { playlistMapping.sourceResource.provider = it },
-                cmbTargetProvider to { playlistMapping.targetResource.provider = it }
+            cmbSourceProvider to { playlistMapping.sourceResource.provider = it },
+            cmbTargetProvider to { playlistMapping.targetResource.provider = it }
         )
 
         for ((combobox, etter) in cmbInputToEtterMap) {
@@ -75,9 +75,9 @@ class PlaylistMappingController : Initializable {
         }
 
         val txtInputToEtterMap = mapOf<TextField, (String) -> Unit>(
-                txtName to { playlistMapping.name = it },
-                txtSourceId to { playlistMapping.sourceResource.id = it },
-                txtTargetId to { playlistMapping.targetResource.id = it }
+            txtName to { playlistMapping.name = it },
+            txtSourceId to { playlistMapping.sourceResource.id = it },
+            txtTargetId to { playlistMapping.targetResource.id = it }
         )
 
         for ((textField, etter) in txtInputToEtterMap) {

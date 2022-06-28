@@ -1,20 +1,22 @@
 package de.dargmuesli.spotilist.providers.spotify
 
-import de.dargmuesli.spotilist.persistence.state.SpotilistState
+import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
+import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
 import se.michaelthelin.spotify.SpotifyApi
 import se.michaelthelin.spotify.requests.data.AbstractDataPagingRequest
+import java.net.URI
 
 object SpotifyUtil {
     val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
-        .setClientId(SpotilistState.settings.spotifySettings.clientId)
-        .setClientSecret(SpotilistState.settings.spotifySettings.clientSecret)
-        .setRedirectUri(SpotilistState.settings.spotifySettings.redirectUri)
+        .setClientId(SpotifyConfig.clientId.value)
+        .setClientSecret(SpotifyConfig.clientSecret.value)
+        .setRedirectUri(URI(SpotifyConfig.redirectUri.value))
     var spotifyApi: SpotifyApi = spotifyApiBuilder.build()
 
     init {
-        if (SpotilistState.data.spotifyData.accessToken != "") {
+        if (SpotifyCache.accessToken.value != "") {
             spotifyApi = spotifyApiBuilder
-                .setAccessToken(SpotilistState.data.spotifyData.accessToken)
+                .setAccessToken(SpotifyCache.accessToken.value)
                 .build()
         }
     }
@@ -23,7 +25,7 @@ object SpotifyUtil {
         val authorizationCode = spotifyApi.clientCredentials()
             .build().execute()
 
-        SpotilistState.data.spotifyData.accessToken = authorizationCode.accessToken
+        SpotifyCache.accessToken.value = authorizationCode.accessToken
     }
 
     fun <T> getAllPagingItems(requestBuilder: AbstractDataPagingRequest.Builder<T, *>): List<T> {

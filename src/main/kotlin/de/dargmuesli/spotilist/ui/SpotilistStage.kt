@@ -22,7 +22,7 @@ class SpotilistStage(
 ) : Stage() {
     init {
         try {
-            val dashboard = FXMLLoader.load<Parent>(MainApp::class.java.getResource(fxmlPath))
+            val dashboard = FXMLLoader.load<Parent>(MainApp::class.java.getResource(fxmlPath), MainApp.resources)
             val scene = Scene(dashboard)
 
             if (minHeight != Control.USE_COMPUTED_SIZE) {

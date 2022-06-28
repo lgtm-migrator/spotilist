@@ -15,7 +15,7 @@ object FileSystemProvider : ISpotilistProvider {
             playlistTracks.add(Track(name = file.nameWithoutExtension))
         }
 
-        return Playlist(playlistName, playlistTracks)
+        return Playlist(name = playlistName, tracks = playlistTracks)
     }
 
     override fun isPlaylistIdValid(playlistId: String): Boolean {

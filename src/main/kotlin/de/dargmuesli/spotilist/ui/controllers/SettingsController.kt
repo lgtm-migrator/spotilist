@@ -1,15 +1,13 @@
 package de.dargmuesli.spotilist.ui.controllers
 
-import de.dargmuesli.spotilist.persistence.state.settings.spotify.SpotifySettings
-import de.dargmuesli.spotilist.persistence.state.settings.youtube.YouTubeSettings
+import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
+import de.dargmuesli.spotilist.persistence.config.YouTubeConfig
 import de.dargmuesli.spotilist.providers.spotify.SpotifyUtil
-import de.dargmuesli.spotilist.util.Etter
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import java.net.MalformedURLException
-import java.net.URI
 import java.net.URISyntaxException
 import java.net.URL
 import java.util.*
@@ -27,50 +25,46 @@ class SettingsController : Initializable {
     private lateinit var spotifyRedirectUriTextField: TextField
 
     @FXML
-    private lateinit var btnOpenAuthorization: Button
+    private lateinit var openAuthorizationButton: Button
 
     @FXML
     private lateinit var youTubeApiKeyTextField: TextField
 
     override fun initialize(url: URL?, rb: ResourceBundle?) {
-        val uriToEtterMap = mapOf(
-            spotifyRedirectUriTextField to Etter({ SpotifySettings.redirectUri }, { SpotifySettings.redirectUri = it })
-        )
+        spotifyClientIdTextField.text = SpotifyConfig.clientId.value
+        spotifyClientSecretTextField.text = SpotifyConfig.clientSecret.value
+        spotifyRedirectUriTextField.text = SpotifyConfig.redirectUri.value
+        youTubeApiKeyTextField.text = YouTubeConfig.apiKey.value
 
-        for ((textField, etter) in uriToEtterMap) {
-            textField.text = etter.getter.invoke().toString()
-            textField.textProperty().addListener { _, _, newText -> etter.setter.invoke(URI(newText)) }
-        }
+        openAuthorizationButton.isDisable = !isAuthorizable()
+    }
 
-        val txtToEtterMap = mapOf(
-            spotifyClientIdTextField to Etter({ SpotifySettings.clientId }, { SpotifySettings.clientId = it }),
-            spotifyClientSecretTextField to Etter(
-                { SpotifySettings.clientSecret },
-                { SpotifySettings.clientSecret = it }),
-            youTubeApiKeyTextField to Etter({ YouTubeSettings.apiKey }, { YouTubeSettings.apiKey = it })
-        )
+    @FXML
+    private fun onSpotifyClientIdInput() {
+        SpotifyConfig.clientId.set(spotifyClientIdTextField.text)
+        openAuthorizationButton.isDisable = !isAuthorizable()
+    }
 
-        for ((textField, etter) in txtToEtterMap) {
-            textField.text = etter.getter.invoke()
-            textField.textProperty().addListener { _, _, newText -> etter.setter.invoke(newText) }
+    @FXML
+    private fun onSpotifyClientSecretInput() {
+        SpotifyConfig.clientSecret.set(spotifyClientSecretTextField.text)
+        openAuthorizationButton.isDisable = !isAuthorizable()
+    }
 
-            if (textField in setOf(
-                    spotifyClientIdTextField,
-                    spotifyClientSecretTextField,
-                    spotifyRedirectUriTextField
-                )
-            ) {
-                textField.textProperty().addListener { _, _, _ ->
-                    btnOpenAuthorization.isDisable = !isAuthorizable()
-                }
+    @FXML
+    private fun onSpotifyRedirectUriInput() {
+        SpotifyConfig.redirectUri.set(spotifyRedirectUriTextField.text)
+        openAuthorizationButton.isDisable = !isAuthorizable()
+    }
 
-                if (textField == spotifyRedirectUriTextField) {
-                    SpotifyUtil.spotifyApi = SpotifyUtil.spotifyApiBuilder.build()
-                }
-            }
-        }
+    @FXML
+    private fun onYouTubeApiKeyInput() {
+        YouTubeConfig.apiKey.set(youTubeApiKeyTextField.text)
+    }
 
-        btnOpenAuthorization.isDisable = !isAuthorizable()
+    @FXML
+    private fun openAuthorization() {
+        SpotifyUtil.openAuthorization()
     }
 
     private fun isAuthorizable(): Boolean {
@@ -89,10 +83,5 @@ class SettingsController : Initializable {
         } catch (exception: MalformedURLException) {
             false
         }
-    }
-
-    @FXML
-    private fun openAuthorization() {
-        SpotifyUtil.openAuthorization()
     }
 }

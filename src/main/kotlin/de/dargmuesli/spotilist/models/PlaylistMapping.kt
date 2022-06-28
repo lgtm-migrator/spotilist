@@ -1,11 +1,13 @@
 package de.dargmuesli.spotilist.models
 
-import de.dargmuesli.spotilist.models.enums.SpotilistProvider
-import de.dargmuesli.spotilist.persistence.state.SpotilistState
+import de.dargmuesli.spotilist.persistence.SpotilistCache
+import de.dargmuesli.spotilist.providers.SpotilistProvider
 import de.dargmuesli.spotilist.util.Util
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PlaylistMapping(
-    var name: String = Util.getUnusedPlaylistMappingName(SpotilistState.data.playlistMappings),
+    var name: String = Util.getUnusedPlaylistMappingName(SpotilistCache.playlistMappings),
     var sourceResource: PlaylistMappingResource = PlaylistMappingResource(),
     var targetResource: PlaylistMappingResource = PlaylistMappingResource(),
     var blacklistSource: Array<String> = arrayOf(),

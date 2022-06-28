@@ -27,11 +27,6 @@ public enum AlbumType {
         return map.get(type);
     }
 
-    /**
-     * Get the album type as a string.
-     *
-     * @return Album type as string.
-     */
     public String getType() {
         return type;
     }

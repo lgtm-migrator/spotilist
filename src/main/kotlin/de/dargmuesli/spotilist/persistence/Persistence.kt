@@ -1,21 +1,41 @@
 package de.dargmuesli.spotilist.persistence
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.google.api.services.youtube.model.PlaylistItem
 import de.dargmuesli.spotilist.MainApp
-import de.dargmuesli.spotilist.persistence.state.SpotilistStateWrapper
 import de.dargmuesli.spotilist.ui.SpotilistNotification
-import java.io.IOException
+import javafx.beans.property.SimpleBooleanProperty
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
-import java.util.logging.Logger.getGlobal
 import kotlin.system.exitProcess
 
+@OptIn(ExperimentalSerializationApi::class)
+val module = SerializersModule {
+    polymorphicDefaultSerializer(AbstractSerializable::class) { instance ->
+        @Suppress("UNCHECKED_CAST")
+        when (instance) {
+            is SpotilistCache -> SpotilistCache.Serializer as SerializationStrategy<AbstractSerializable>
+            is SpotilistConfig -> SpotilistConfig.Serializer as SerializationStrategy<AbstractSerializable>
+        }
+    }
+}
+
+val format = Json {
+    prettyPrint = true
+    encodeDefaults = true
+    serializersModule = module
+}
+
 object Persistence {
-    private val appDataDirectory: Path
+    var isInitialized = SimpleBooleanProperty(false)
+
+    private val cacheDirectory: Path = Paths.get(System.getProperty("user.home"), ".cache", MainApp.APPLICATION_TITLE)
+    private val configDirectory: Path
         get() {
             val os = System.getProperty("os.name").lowercase()
 
@@ -27,71 +47,68 @@ object Persistence {
                 Paths.get("")
             }
         }
-    private val jackson: ObjectMapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
-    private val settingsFile = appDataDirectory.resolve("settings.json")
+    private val localDirectory: Path =
+        Paths.get(System.getProperty("user.home"), ".local", "share", MainApp.APPLICATION_TITLE)
+    val tmpDirectory: Path = Paths.get(System.getProperty("java.io.tmpdir"), MainApp.APPLICATION_TITLE)
+    private val fileMap = hashMapOf(
+        PersistenceTypes.CACHE to cacheDirectory,
+        PersistenceTypes.CONFIG to configDirectory
+    )
 
-    fun loadSettings() {
-        if (Files.exists(settingsFile)) {
-            try {
-                SpotilistStateWrapper.state =
-                    jackson.readValue(String(Files.readAllBytes(settingsFile)), SpotilistStateWrapper.javaClass).state
-            } catch (e: Exception) {
-                SpotilistNotification.displayError("Loading application settings failed!", e)
-                exitProcess(0)
+    private val versionProperties = Properties()
+
+    init {
+//        versionProperties.load(this.javaClass.getResourceAsStream("/version.properties"))
+    }
+
+    fun getVersion(): String = versionProperties.getProperty("version")
+
+    fun load(vararg types: PersistenceTypes) {
+        if (types.isEmpty()) {
+            load(*fileMap.keys.toTypedArray())
+            isInitialized.set(true)
+        } else {
+            for (type in types) {
+                fileMap[type]?.let { directory ->
+                    val filePath = directory.resolve("${type.toString().lowercase()}.json")
+
+                    if (Files.exists(filePath)) {
+                        try {
+                            PersistenceWrapper[type] =
+                                format.decodeFromString(
+                                    AbstractSerializable.serializer(),
+                                    String(Files.readAllBytes(filePath))
+                                )
+                        } catch (e: Exception) {
+                            SpotilistNotification.error("Loading application data failed!", e)
+                            exitProcess(0)
+                        }
+                    }
+                }
             }
         }
     }
 
-    fun saveSettings() {
-        if (!Files.exists(settingsFile.parent)) {
-            Files.createDirectories(settingsFile.parent)
-        }
+    fun save(vararg types: PersistenceTypes) {
+        if (!isInitialized.value) return
 
-        Files.writeString(settingsFile, jackson.writeValueAsString(SpotilistStateWrapper))
-    }
+        if (types.isEmpty()) {
+            save(*fileMap.keys.toTypedArray())
+        } else {
+            for (type in types) {
+                fileMap[type]?.let { directory ->
+                    val filePath = directory.resolve("${type.toString().lowercase()}.json")
 
-    fun getCacheDirectory(): Path {
-        return Paths.get(System.getProperty("java.io.tmpdir"), MainApp.APPLICATION_TITLE)
-    }
+                    if (!Files.exists(filePath.parent)) {
+                        Files.createDirectories(filePath.parent)
+                    }
 
-    fun loadPlaylistItemsCache(cacheDirectory: Path): Map<String, PlaylistItem> {
-        val playlistItems = HashMap<String, PlaylistItem>()
-        val properties = Properties()
-
-        if (Files.isRegularFile(cacheDirectory)) {
-            try {
-                properties.load(Files.newInputStream(cacheDirectory))
-            } catch (e: IOException) {
-                println("Could not load YouTubeSettings cache.")
+                    Files.writeString(
+                        filePath,
+                        format.encodeToString(PersistenceWrapper[type])
+                    )
+                }
             }
-
         }
-
-        for (key in properties.stringPropertyNames()) {
-            try {
-                playlistItems[key] = ObjectMapper().readValue(properties[key].toString(), PlaylistItem::class.java)
-            } catch (e: IOException) {
-                println("Could not parse \"" + properties[key].toString() + "\".")
-            }
-
-        }
-
-        return playlistItems
-    }
-
-    fun savePlaylistItems(playlistItemMap: Map<String, PlaylistItem>, cacheDirectory: Path) {
-        val properties = Properties()
-
-        for ((key, value) in playlistItemMap) {
-            properties[key] = value.toString()
-        }
-
-        val cacheDirectoryParentFile = cacheDirectory.parent
-
-        if (!Files.isRegularFile(cacheDirectoryParentFile)) {
-            getGlobal().info("Created directory: " + Files.createDirectories(cacheDirectoryParentFile))
-        }
-
-        properties.store(Files.newOutputStream(cacheDirectory), null)
     }
 }

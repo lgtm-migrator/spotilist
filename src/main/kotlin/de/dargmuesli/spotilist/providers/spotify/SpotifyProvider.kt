@@ -5,7 +5,7 @@ import de.dargmuesli.spotilist.models.music.Album
 import de.dargmuesli.spotilist.models.music.Artist
 import de.dargmuesli.spotilist.models.music.Playlist
 import de.dargmuesli.spotilist.models.music.Track
-import de.dargmuesli.spotilist.persistence.state.SpotilistState
+import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.providers.ISpotilistProviderAuthorizable
 import org.apache.logging.log4j.LogManager
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException
@@ -43,10 +43,10 @@ object SpotifyProvider : ISpotilistProviderAuthorizable {
             val trackDurationMs = spotifyPlaylistTrack.track.durationMs
             val trackName = spotifyPlaylistTrack.track.name
 
-            playlistTracks.add(Track(trackAlbum, trackArtists, trackDurationMs, trackName))
+            playlistTracks.add(Track(trackAlbum, trackArtists, trackDurationMs.toLong(), trackName))
         }
 
-        return Playlist(spotifyPlaylistName, playlistTracks)
+        return Playlist(name = spotifyPlaylistName, tracks = playlistTracks)
     }
 
     override fun isPlaylistIdValid(playlistId: String): Boolean {
@@ -74,7 +74,7 @@ object SpotifyProvider : ISpotilistProviderAuthorizable {
     }
 
     override fun isAuthorized(): Boolean {
-        if (SpotilistState.data.spotifyData.accessToken == null) {
+        if (SpotifyCache.accessToken.value == null) {
             return false
         }
 

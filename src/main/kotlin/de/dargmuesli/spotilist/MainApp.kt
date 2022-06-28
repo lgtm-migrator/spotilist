@@ -9,26 +9,16 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
-
 import java.io.IOException
-import kotlin.system.exitProcess
+import java.util.*
 
 class MainApp : Application() {
-
     override fun start(stage: Stage) {
-        Persistence.loadSettings()
-
         SpotilistStage.makeSpotilistStage(stage)
-
         Companion.stage = stage
 
-        stage.setOnCloseRequest {
-            Persistence.saveSettings()
-            exitProcess(0)
-        }
-
         try {
-            val dashboardLoader = FXMLLoader(javaClass.getResource("/de/dargmuesli/spotilist/fxml/Dashboard.fxml"))
+            val dashboardLoader = FXMLLoader(MainApp::class.java.getResource("fxml/Dashboard.fxml"), resources)
             val dashboard = dashboardLoader.load<Parent>()
             dashboardController = dashboardLoader.getController()
 
@@ -39,11 +29,14 @@ class MainApp : Application() {
         } catch (e: IOException) {
             LogManager.getLogger().error("Loading the dashboard failed!", e)
         }
+
+        Persistence.load()
     }
 
     companion object {
         lateinit var stage: Stage
         lateinit var dashboardController: DashboardController
+        val resources: ResourceBundle = ResourceBundle.getBundle("i18n", Locale.getDefault())
 
         internal const val APPLICATION_TITLE = "Spotilist"
 

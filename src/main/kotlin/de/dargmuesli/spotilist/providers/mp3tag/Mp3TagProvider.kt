@@ -34,10 +34,10 @@ object Mp3TagProvider : ISpotilistProvider {
             val trackDurationMs = mp3File.lengthInMilliseconds
             val trackName = id3v2Tag.title
 
-            playlistTracks.add(Track(trackAlbum, trackArtists, trackDurationMs.toInt(), trackName))
+            playlistTracks.add(Track(trackAlbum, trackArtists, trackDurationMs, trackName))
         }
 
-        return Playlist(playlistName, playlistTracks)
+        return Playlist(name = playlistName, tracks = playlistTracks)
     }
 
     override fun isPlaylistIdValid(playlistId: String): Boolean {

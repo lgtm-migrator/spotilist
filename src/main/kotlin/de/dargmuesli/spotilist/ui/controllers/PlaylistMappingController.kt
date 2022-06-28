@@ -2,8 +2,8 @@ package de.dargmuesli.spotilist.ui.controllers
 
 import de.dargmuesli.spotilist.MainApp
 import de.dargmuesli.spotilist.models.PlaylistMapping
-import de.dargmuesli.spotilist.models.enums.SpotilistProvider
-import de.dargmuesli.spotilist.persistence.state.SpotilistState
+import de.dargmuesli.spotilist.persistence.SpotilistCache
+import de.dargmuesli.spotilist.providers.SpotilistProvider
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
@@ -92,7 +92,7 @@ class PlaylistMappingController : Initializable {
 
     @FXML
     private fun delete() {
-        SpotilistState.data.playlistMappings.remove(playlistMapping)
+        SpotilistCache.playlistMappings.remove(playlistMapping)
         MainApp.dashboardController.updatePlaylistMappings()
     }
 
@@ -116,7 +116,7 @@ class PlaylistMappingController : Initializable {
 
         lblData.text = "Source playlist name: " + sourcePlaylist.name +
                 "\nTarget playlist name: " + targetPlaylist.name +
-                "\nSource playlist track count: " + sourcePlaylist.tracks.size +
-                "\nTarget playlist track count: " + targetPlaylist.tracks.size
+                "\nSource playlist track count: " + sourcePlaylist.tracks?.size +
+                "\nTarget playlist track count: " + targetPlaylist.tracks?.size
     }
 }

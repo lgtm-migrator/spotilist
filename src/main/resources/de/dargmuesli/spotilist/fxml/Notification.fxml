@@ -6,10 +6,8 @@
 <HBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" minHeight="100.0" minWidth="250.0"
       stylesheets="/de/dargmuesli/spotilist/css/styles.css" xmlns="http://javafx.com/javafx"
       fx:controller="de.dargmuesli.spotilist.ui.controllers.NotificationController">
-    <children>
-        <Label fx:id="lblNotification" stylesheets="/de/dargmuesli/spotilist/css/styles.css" text="Dies ist ein Text"/>
-    </children>
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
     </padding>
+    <Label fx:id="lblNotification" stylesheets="/de/dargmuesli/spotilist/css/styles.css" text="Dies ist ein Text"/>
 </HBox>

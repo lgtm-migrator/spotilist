@@ -1,9 +1,7 @@
-package de.dargmuesli.spotilist.models.enums
+package de.dargmuesli.spotilist.providers
 
 import de.dargmuesli.spotilist.models.PlaylistMappingResource
 import de.dargmuesli.spotilist.models.music.Playlist
-import de.dargmuesli.spotilist.providers.ISpotilistProvider
-import de.dargmuesli.spotilist.providers.NoneProvider
 import de.dargmuesli.spotilist.providers.file_system.FileSystemProvider
 import de.dargmuesli.spotilist.providers.mp3tag.Mp3TagProvider
 import de.dargmuesli.spotilist.providers.spotify.SpotifyProvider

@@ -1,4 +1,4 @@
-open module de.dargmuesli.dargmusic {
+open module de.dargmuesli.spotilist {
     requires com.fasterxml.jackson.databind;
     requires com.google.api.client;
     requires com.google.api.services.youtube;

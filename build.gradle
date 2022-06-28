@@ -1,7 +1,7 @@
 plugins {
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 repositories {
@@ -20,6 +20,11 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
 }
 
+application {
+    mainModule = 'de.dargmuesli.spotilist'
+    mainClass = 'de.dargmuesli.spotilist.MainApp'
+}
+
 javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
@@ -35,5 +40,4 @@ compileTestKotlin {
     }
 }
 
-mainClassName = 'de.dargmuesli.dargmusic.MainApp'
 version '0.1.0'

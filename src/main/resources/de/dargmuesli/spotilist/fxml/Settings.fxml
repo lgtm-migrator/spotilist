@@ -37,6 +37,7 @@
                     <RowConstraints/>
                     <RowConstraints/>
                     <RowConstraints/>
+                    <RowConstraints/>
                 </rowConstraints>
                 <opaqueInsets>
                     <Insets/>
@@ -51,14 +52,23 @@
                 <Label styleClass="bold" text="Client Secret" GridPane.columnIndex="0"
                        GridPane.rowIndex="1"/>
                 <TextField fx:id="spotifyClientSecretTextField" prefHeight="25.0"
-                           GridPane.columnIndex="1" GridPane.rowIndex="1" HBox.hgrow="ALWAYS" onKeyTyped="#onSpotifyClientSecretInput"/>
+                           GridPane.columnIndex="1" GridPane.rowIndex="1" HBox.hgrow="ALWAYS"
+                           onKeyTyped="#onSpotifyClientSecretInput"/>
                 <Label styleClass="bold" text="Redirect URI" GridPane.columnIndex="0"
                        GridPane.rowIndex="2"/>
                 <TextField fx:id="spotifyRedirectUriTextField" prefHeight="25.0"
-                           GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" onKeyTyped="#onSpotifyRedirectUriInput"/>
+                           GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS"
+                           onKeyTyped="#onSpotifyRedirectUriInput"/>
+                <Label styleClass="bold" text="Authorization Code" GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"/>
+                <TextField fx:id="spotifyAuthorizationCodeTextField" prefHeight="25.0"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3" HBox.hgrow="ALWAYS"
+                           onKeyTyped="#onSpotifyAuthorizationCodeInput"/>
+                <Label fx:id="spotifyAuthorizationLabel" styleClass="bold" text="-" GridPane.columnIndex="0"
+                       GridPane.rowIndex="4"/>
                 <Button fx:id="openAuthorizationButton" disable="true" mnemonicParsing="false"
                         onAction="#openAuthorization" text="Open Authorization" GridPane.columnIndex="1"
-                        GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+                        GridPane.halignment="CENTER" GridPane.rowIndex="4"/>
             </GridPane>
         </VBox>
         <VBox>
@@ -81,7 +91,8 @@
                     <Insets/>
                 </opaqueInsets>
                 <Label prefHeight="25.0" prefWidth="95.0" styleClass="bold" text="API key"/>
-                <TextField fx:id="youTubeApiKeyTextField" prefHeight="25.0" HBox.hgrow="ALWAYS" onKeyTyped="#onYouTubeApiKeyInput"/>
+                <TextField fx:id="youTubeApiKeyTextField" prefHeight="25.0" HBox.hgrow="ALWAYS"
+                           onKeyTyped="#onYouTubeApiKeyInput"/>
             </HBox>
         </VBox>
     </VBox>

@@ -27,6 +27,11 @@ object SpotifyConfig {
             Persistence.save(PersistenceTypes.CONFIG)
         }
     }
+    val authorizationCode = SimpleStringProperty().also {
+        it.addListener { _ ->
+            Persistence.save(PersistenceTypes.CONFIG)
+        }
+    }
 
     object Serializer : KSerializer<SpotifyConfig> {
         override val descriptor: SerialDescriptor = SpotifyConfigSurrogate.serializer().descriptor
@@ -34,7 +39,7 @@ object SpotifyConfig {
         override fun serialize(encoder: Encoder, value: SpotifyConfig) {
             encoder.encodeSerializableValue(
                 SpotifyConfigSurrogate.serializer(),
-                SpotifyConfigSurrogate(clientId.value, clientSecret.value, redirectUri.value)
+                SpotifyConfigSurrogate(clientId.value, clientSecret.value, redirectUri.value, authorizationCode.value)
             )
         }
 
@@ -43,11 +48,17 @@ object SpotifyConfig {
             clientId.set(spotifyConfig.clientId)
             clientSecret.set(spotifyConfig.clientSecret)
             redirectUri.set(spotifyConfig.redirectUri)
+            authorizationCode.set(spotifyConfig.authorizationCode)
             return SpotifyConfig
         }
     }
 
     @Serializable
     @SerialName("SpotifyConfig")
-    private data class SpotifyConfigSurrogate(val clientId: String?, val clientSecret: String?, val redirectUri: String?)
+    private data class SpotifyConfigSurrogate(
+        val clientId: String?,
+        val clientSecret: String?,
+        val redirectUri: String?,
+        val authorizationCode: String?
+    )
 }

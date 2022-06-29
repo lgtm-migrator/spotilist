@@ -8,9 +8,16 @@ import de.dargmuesli.spotilist.models.music.Track
 import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
 import de.dargmuesli.spotilist.providers.ISpotilistProviderAuthorizable
+import de.dargmuesli.spotilist.ui.SpotilistNotification
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.javafx.JavaFx
+import kotlinx.coroutines.javafx.JavaFxDispatcher
+import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
 import se.michaelthelin.spotify.SpotifyApi
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException
+import se.michaelthelin.spotify.exceptions.detailed.BadRequestException
 import se.michaelthelin.spotify.exceptions.detailed.NotFoundException
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException
 import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack
@@ -18,9 +25,13 @@ import se.michaelthelin.spotify.requests.data.AbstractDataPagingRequest
 import java.awt.Desktop
 import java.io.IOException
 import java.net.URI
+import java.util.*
 
 
-object SpotifyProvider : ISpotilistProviderAuthorizable {
+object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
+    override val coroutineContext: JavaFxDispatcher
+        get() = Dispatchers.JavaFx
+
     private val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
         .setClientId(SpotifyConfig.clientId.value)
         .setClientSecret(SpotifyConfig.clientSecret.value)
@@ -36,11 +47,24 @@ object SpotifyProvider : ISpotilistProviderAuthorizable {
     }
 
     fun openAuthorization() {
-        val authorizationCode = spotifyApi.authorizationCodeUri()
-            .build().execute()
-        Desktop.getDesktop().browse(authorizationCode)
+        if (SpotifyConfig.authorizationCode.value.isNullOrEmpty()) {
+            val authorizationCodeUri = spotifyApi.authorizationCodeUri()
+                .build().execute()
 
-//        SpotifyCache.accessToken.value = authorizationCode.accessToken
+            launch(Dispatchers.IO) {
+                Desktop.getDesktop().browse(authorizationCodeUri)
+            }
+        } else {
+            try {
+                val authorizationCode =
+                    spotifyApi.authorizationCode(SpotifyConfig.authorizationCode.value).build().execute()
+                SpotifyCache.accessToken.set(authorizationCode.accessToken)
+                SpotifyCache.refreshToken.set(authorizationCode.refreshToken)
+                SpotifyCache.accessTokenExpiresAt.set(Date().time / 1000 + authorizationCode.expiresIn)
+            } catch (e: BadRequestException) {
+                e.message?.let { SpotilistNotification.error(it) }
+            }
+        }
     }
 
     private fun <T> getAllPagingItems(requestBuilder: AbstractDataPagingRequest.Builder<T, *>): List<T> {

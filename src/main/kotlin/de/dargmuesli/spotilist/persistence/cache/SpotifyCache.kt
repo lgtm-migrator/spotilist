@@ -4,6 +4,7 @@ import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.util.serializer.SpotifyPlaylistSerializer
 import de.dargmuesli.spotilist.util.serializer.SpotifyTrackSerializer
+import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableHashMap
 import javafx.collections.ObservableMap
@@ -25,6 +26,12 @@ object SpotifyCache : IProviderCache<Playlist, Track> {
     val accessToken = SimpleStringProperty().also {
         it.addListener { _, _, _ -> Persistence.save(PersistenceTypes.CACHE) }
     }
+    val refreshToken = SimpleStringProperty().also {
+        it.addListener { _, _, _ -> Persistence.save(PersistenceTypes.CACHE) }
+    }
+    val accessTokenExpiresAt = SimpleLongProperty().also {
+        it.addListener { _, _, _ -> Persistence.save(PersistenceTypes.CACHE) }
+    }
 
     object Serializer : KSerializer<SpotifyCache> {
         override val descriptor: SerialDescriptor = SpotifyCacheSurrogate.serializer().descriptor
@@ -32,7 +39,12 @@ object SpotifyCache : IProviderCache<Playlist, Track> {
         override fun serialize(encoder: Encoder, value: SpotifyCache) {
             encoder.encodeSerializableValue(
                 SpotifyCacheSurrogate.serializer(),
-                SpotifyCacheSurrogate(playlistData.toMap(), playlistItemData.toMap())
+                SpotifyCacheSurrogate(
+                    playlistData.toMap(), playlistItemData.toMap(),
+                    accessToken.value,
+                    refreshToken.value,
+                    accessTokenExpiresAt.value
+                )
             )
         }
 
@@ -40,6 +52,9 @@ object SpotifyCache : IProviderCache<Playlist, Track> {
             val spotifyCache = decoder.decodeSerializableValue(SpotifyCacheSurrogate.serializer())
             playlistData.putAll(spotifyCache.playlistData)
             playlistItemData.putAll(spotifyCache.playlistItemData)
+            accessToken.set(spotifyCache.accessToken)
+            refreshToken.set(spotifyCache.refreshToken)
+            spotifyCache.accessTokenExpiresAt?.also { accessTokenExpiresAt.set(it) }
             return SpotifyCache
         }
     }
@@ -48,7 +63,10 @@ object SpotifyCache : IProviderCache<Playlist, Track> {
     @SerialName("SpotifyCache")
     private data class SpotifyCacheSurrogate(
         val playlistData: Map<String, @Serializable(with = SpotifyPlaylistSerializer.Serializer::class) Playlist>,
-        val playlistItemData: Map<String, @Serializable(with = SpotifyTrackSerializer.Serializer::class) Track>
+        val playlistItemData: Map<String, @Serializable(with = SpotifyTrackSerializer.Serializer::class) Track>,
+        val accessToken: String?,
+        val refreshToken: String?,
+        val accessTokenExpiresAt: Long?
     )
 
     override fun clear() {

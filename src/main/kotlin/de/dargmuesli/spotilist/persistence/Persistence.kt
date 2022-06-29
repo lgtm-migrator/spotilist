@@ -58,7 +58,7 @@ object Persistence {
     private val versionProperties = Properties()
 
     init {
-//        versionProperties.load(this.javaClass.getResourceAsStream("/version.properties"))
+        versionProperties.load(this.javaClass.getResourceAsStream("/version.properties"))
     }
 
     fun getVersion(): String = versionProperties.getProperty("version")

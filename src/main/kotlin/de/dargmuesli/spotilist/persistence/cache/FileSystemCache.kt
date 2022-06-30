@@ -39,14 +39,4 @@ object FileSystemCache : IProviderCache<Path, Path> {
         val playlistData: Map<String, Path>,
         val playlistItemData: Map<String, Path>
     )
-
-    override fun clear() {
-        for (entry in playlistData) {
-            playlistData.remove(entry.key)
-        }
-
-        for (entry in playlistItemData) {
-            playlistItemData.remove(entry.key)
-        }
-    }
 }

@@ -68,14 +68,4 @@ object SpotifyCache : IProviderCache<Playlist, Track> {
         val refreshToken: String?,
         val accessTokenExpiresAt: Long?
     )
-
-    override fun clear() {
-        for (entry in playlistData) {
-            playlistData.remove(entry.key)
-        }
-
-        for (entry in playlistItemData) {
-            playlistItemData.remove(entry.key)
-        }
-    }
 }

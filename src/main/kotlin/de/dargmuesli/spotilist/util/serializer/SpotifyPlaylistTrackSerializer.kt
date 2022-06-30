@@ -8,13 +8,13 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import se.michaelthelin.spotify.model_objects.specification.Track
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack
 
-class SpotifyTrackSerializer {
-    object Serializer : KSerializer<Track> {
+class SpotifyPlaylistTrackSerializer {
+    object Serializer : KSerializer<PlaylistTrack> {
         override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Track", PrimitiveKind.STRING)
 
-        override fun serialize(encoder: Encoder, value: Track) {
+        override fun serialize(encoder: Encoder, value: PlaylistTrack) {
             encoder.encodeString(
                 GsonBuilder()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -22,8 +22,8 @@ class SpotifyTrackSerializer {
             )
         }
 
-        override fun deserialize(decoder: Decoder): Track {
-            return Track.JsonUtil().createModelObject(decoder.decodeString())
+        override fun deserialize(decoder: Decoder): PlaylistTrack {
+            return PlaylistTrack.JsonUtil().createModelObject(decoder.decodeString())
         }
     }
 }

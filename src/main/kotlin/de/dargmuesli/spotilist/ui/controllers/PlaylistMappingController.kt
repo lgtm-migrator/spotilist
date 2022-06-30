@@ -146,6 +146,8 @@ class PlaylistMappingController : Initializable {
                 playlistMapping.targetResource.id.value
             )
 
+        if (sourcePlaylist == null || targetPlaylist == null) return
+
         dataLabel.text = "Source playlist name: " + sourcePlaylist.name +
                 "\nTarget playlist name: " + targetPlaylist.name +
                 "\nSource playlist track count: " + sourcePlaylist.tracks?.size +

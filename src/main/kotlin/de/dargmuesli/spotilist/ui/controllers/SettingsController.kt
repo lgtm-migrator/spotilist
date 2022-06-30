@@ -3,7 +3,7 @@ package de.dargmuesli.spotilist.ui.controllers
 import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
 import de.dargmuesli.spotilist.persistence.config.YouTubeConfig
-import de.dargmuesli.spotilist.providers.provider.SpotifyProvider
+import de.dargmuesli.spotilist.providers.util.SpotifyUtil
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Button
@@ -110,7 +110,7 @@ class SettingsController : Initializable {
 
     @FXML
     private fun openAuthorization() {
-        SpotifyProvider.authorize()
+        SpotifyUtil.authorize()
 
         if (SpotifyCache.accessTokenExpiresAt.value > Date().time / 1000) {
             SpotifyConfig.authorizationCode.set("")

@@ -3,10 +3,11 @@ package de.dargmuesli.spotilist.persistence.cache
 import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.util.serializer.SpotifyPlaylistSerializer
-import de.dargmuesli.spotilist.util.serializer.SpotifyTrackSerializer
+import de.dargmuesli.spotilist.util.serializer.SpotifyPlaylistTrackSerializer
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableHashMap
+import javafx.collections.MapChangeListener
 import javafx.collections.ObservableMap
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -15,13 +16,22 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import se.michaelthelin.spotify.model_objects.specification.Playlist
-import se.michaelthelin.spotify.model_objects.specification.Track
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack
 
 
 @Serializable(with = SpotifyCache.Serializer::class)
-object SpotifyCache : IProviderCache<Playlist, Track> {
-    override var playlistData: ObservableMap<String, Playlist> = observableHashMap()
-    override var playlistItemData: ObservableMap<String, Track> = observableHashMap()
+object SpotifyCache : IProviderCache<Playlist, PlaylistTrack> {
+    override var playlistData: ObservableMap<String, Playlist> = observableHashMap<String?, Playlist?>().also {
+        it.addListener(MapChangeListener {
+            Persistence.save(PersistenceTypes.CACHE)
+        })
+    }
+    override var playlistItemData: ObservableMap<String, PlaylistTrack> =
+        observableHashMap<String?, PlaylistTrack?>().also {
+            it.addListener(MapChangeListener {
+                Persistence.save(PersistenceTypes.CACHE)
+            })
+        }
 
     val accessToken = SimpleStringProperty().also {
         it.addListener { _, _, _ -> Persistence.save(PersistenceTypes.CACHE) }
@@ -63,7 +73,7 @@ object SpotifyCache : IProviderCache<Playlist, Track> {
     @SerialName("SpotifyCache")
     private data class SpotifyCacheSurrogate(
         val playlistData: Map<String, @Serializable(with = SpotifyPlaylistSerializer.Serializer::class) Playlist>,
-        val playlistItemData: Map<String, @Serializable(with = SpotifyTrackSerializer.Serializer::class) Track>,
+        val playlistItemData: Map<String, @Serializable(with = SpotifyPlaylistTrackSerializer.Serializer::class) PlaylistTrack>,
         val accessToken: String?,
         val refreshToken: String?,
         val accessTokenExpiresAt: Long?

@@ -1,7 +1,9 @@
 open module de.dargmuesli.spotilist {
+    requires com.google.api.client.json.gson;
     requires com.google.api.client;
     requires com.google.api.services.youtube;
     requires com.google.gson;
+    requires google.api.client;
     requires java.desktop;
     requires java.logging;
     requires javafx.controls;

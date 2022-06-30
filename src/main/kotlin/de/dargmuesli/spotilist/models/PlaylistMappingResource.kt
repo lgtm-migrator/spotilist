@@ -13,7 +13,7 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(with = PlaylistMappingResource.Serializer::class)
 data class PlaylistMappingResource(
     var provider: SimpleStringProperty = SimpleStringProperty(SpotilistProviderType.NONE.name),
-    var id: SimpleStringProperty = SimpleStringProperty(""),
+    var id: SimpleStringProperty = SimpleStringProperty(),
     var isValid: SimpleBooleanProperty = SimpleBooleanProperty()
 ) {
     init {

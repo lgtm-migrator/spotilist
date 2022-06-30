@@ -1,7 +1,7 @@
 package de.dargmuesli.spotilist.models.music
 
-import de.dargmuesli.spotilist.models.enums.AlbumType
 import kotlinx.serialization.Serializable
+import se.michaelthelin.spotify.enums.AlbumType
 
 @Serializable
 data class Album(

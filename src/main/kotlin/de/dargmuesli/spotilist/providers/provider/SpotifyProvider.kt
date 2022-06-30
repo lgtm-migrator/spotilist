@@ -1,6 +1,5 @@
 package de.dargmuesli.spotilist.providers.provider
 
-import de.dargmuesli.spotilist.models.enums.AlbumType
 import de.dargmuesli.spotilist.models.music.Album
 import de.dargmuesli.spotilist.models.music.Artist
 import de.dargmuesli.spotilist.models.music.Playlist
@@ -16,6 +15,7 @@ import kotlinx.coroutines.javafx.JavaFxDispatcher
 import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
 import se.michaelthelin.spotify.SpotifyApi
+import se.michaelthelin.spotify.enums.AlbumType
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException
 import se.michaelthelin.spotify.exceptions.detailed.BadRequestException
 import se.michaelthelin.spotify.exceptions.detailed.NotFoundException

@@ -1,4 +1,4 @@
-package de.dargmuesli.spotilist.providers.file_system
+package de.dargmuesli.spotilist.providers.provider
 
 import de.dargmuesli.spotilist.models.music.Playlist
 import de.dargmuesli.spotilist.models.music.Track

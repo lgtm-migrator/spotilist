@@ -1,8 +1,6 @@
 package de.dargmuesli.spotilist.providers
 
-import de.dargmuesli.spotilist.providers.file_system.FileSystemProvider
-import de.dargmuesli.spotilist.providers.mp3tag.Mp3TagProvider
-import de.dargmuesli.spotilist.providers.spotify.SpotifyProvider
+import de.dargmuesli.spotilist.providers.provider.*
 
 /**
  * An enumeration of all possible module types.

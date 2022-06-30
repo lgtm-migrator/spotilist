@@ -3,7 +3,7 @@ package de.dargmuesli.spotilist.ui.controllers
 import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
 import de.dargmuesli.spotilist.persistence.config.YouTubeConfig
-import de.dargmuesli.spotilist.providers.spotify.SpotifyProvider
+import de.dargmuesli.spotilist.providers.provider.SpotifyProvider
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.control.Button

@@ -1,4 +1,4 @@
-package de.dargmuesli.spotilist.providers.mp3tag
+package de.dargmuesli.spotilist.providers.provider
 
 import com.mpatric.mp3agic.ID3v24Tag
 import com.mpatric.mp3agic.Mp3File
@@ -7,7 +7,6 @@ import de.dargmuesli.spotilist.models.music.Artist
 import de.dargmuesli.spotilist.models.music.Playlist
 import de.dargmuesli.spotilist.models.music.Track
 import de.dargmuesli.spotilist.providers.ISpotilistProvider
-import de.dargmuesli.spotilist.providers.file_system.FileSystemProvider
 import java.nio.file.Paths
 
 object Mp3TagProvider : ISpotilistProvider {

@@ -1,4 +1,4 @@
-package de.dargmuesli.spotilist.providers.spotify
+package de.dargmuesli.spotilist.providers.provider
 
 import de.dargmuesli.spotilist.models.enums.AlbumType
 import de.dargmuesli.spotilist.models.music.Album

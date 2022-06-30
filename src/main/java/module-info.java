@@ -17,6 +17,7 @@ open module de.dargmuesli.spotilist {
     requires org.kordamp.ikonli.javafx;
     requires se.michaelthelin.spotify;
 
+    exports de.dargmuesli.spotilist.models;
     exports de.dargmuesli.spotilist.persistence.cache;
     exports de.dargmuesli.spotilist.persistence.config;
     exports de.dargmuesli.spotilist.persistence;

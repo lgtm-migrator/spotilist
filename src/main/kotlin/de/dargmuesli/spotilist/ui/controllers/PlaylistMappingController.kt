@@ -1,10 +1,12 @@
 package de.dargmuesli.spotilist.ui.controllers
 
-import de.dargmuesli.spotilist.MainApp
 import de.dargmuesli.spotilist.models.PlaylistMapping
+import de.dargmuesli.spotilist.persistence.Persistence
+import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.persistence.SpotilistCache
-import de.dargmuesli.spotilist.providers.SpotilistProvider
-import javafx.collections.FXCollections
+import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
+import de.dargmuesli.spotilist.providers.SpotilistProviderType
+import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
@@ -17,104 +19,134 @@ import kotlin.properties.Delegates
 class PlaylistMappingController : Initializable {
 
     @FXML
-    private lateinit var tldpnPlaylistMapping: TitledPane
+    private lateinit var playlistMappingTitledPane: TitledPane
 
     @FXML
-    private lateinit var grdpnPlaylistMappig: GridPane
+    private lateinit var playlistMappingGridPane: GridPane
 
     @FXML
-    private lateinit var txtName: TextField
+    private lateinit var nameTextField: TextField
 
     @FXML
-    private lateinit var cmbSourceProvider: ComboBox<SpotilistProvider>
+    private lateinit var sourceProviderCombobox: ComboBox<String>
 
     @FXML
-    private lateinit var txtSourceId: TextField
+    private lateinit var sourceIdTextField: TextField
 
     @FXML
-    private lateinit var cmbTargetProvider: ComboBox<SpotilistProvider>
+    private lateinit var targetProviderCombobox: ComboBox<String>
 
     @FXML
-    private lateinit var txtTargetId: TextField
+    private lateinit var targetIdTextField: TextField
 
     @FXML
-    private lateinit var btnUseEdit: Button
+    private lateinit var useEditButton: Button
 
     @FXML
-    private lateinit var lblData: Label
+    private lateinit var dataLabel: Label
 
     var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, newValue ->
-        tldpnPlaylistMapping.text = newValue.name
-        txtName.text = newValue.name
-        cmbSourceProvider.value = newValue.sourceResource.provider
-        txtSourceId.text = newValue.sourceResource.id
-        cmbTargetProvider.value = newValue.targetResource.provider
-        txtTargetId.text = newValue.targetResource.id
+        playlistMappingTitledPane.text = newValue.name.value
+        nameTextField.text = newValue.name.value
+        sourceProviderCombobox.value = newValue.sourceResource.provider.value
+        sourceIdTextField.text = newValue.sourceResource.id.value
+        targetProviderCombobox.value = newValue.targetResource.provider.value
+        targetIdTextField.text = newValue.targetResource.id.value
+
+        newValue.sourceResource.isValid.addListener { _ ->
+            updateEditButton()
+        }
+
+        newValue.targetResource.isValid.addListener { _ ->
+            updateEditButton()
+        }
+
+        newValue.isEnabled.addListener { _ ->
+            if (playlistMapping.isEnabled.value) {
+                useEditButton.text = "Edit"
+                playlistMappingGridPane.isDisable = true
+                updateData()
+            } else {
+                useEditButton.text = "Use"
+                playlistMappingGridPane.isDisable = false
+                dataLabel.text = ""
+            }
+        }
+
+        updateEditButton()
     }
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
-        val providerList: ObservableList<SpotilistProvider> = FXCollections.observableArrayList()
+        SpotifyCache.accessToken.addListener { _ ->
+            updateEditButton()
+        }
 
-        SpotilistProvider.values().forEach {
-            if (SpotilistProvider.isValid(it)) {
-                providerList.add(it)
+        val providerList: ObservableList<String> = observableArrayList()
+
+        SpotilistProviderType.values().forEach {
+            if (SpotilistProviderType.isValid(it)) {
+                providerList.add(it.name)
             }
         }
 
-        val cmbInputToEtterMap = mapOf<ComboBox<SpotilistProvider>, (SpotilistProvider) -> Unit>(
-            cmbSourceProvider to { playlistMapping.sourceResource.provider = it },
-            cmbTargetProvider to { playlistMapping.targetResource.provider = it }
+        val cmbInputToSetterMap = mapOf<ComboBox<String>, (String) -> Unit>(
+            sourceProviderCombobox to { playlistMapping.sourceResource.provider.set(it) },
+            targetProviderCombobox to { playlistMapping.targetResource.provider.set(it) }
         )
 
-        for ((combobox, etter) in cmbInputToEtterMap) {
+        for ((combobox, setter) in cmbInputToSetterMap) {
             combobox.items = providerList
             combobox.valueProperty().addListener { _, _, newValue ->
-                etter.invoke(newValue)
-                btnUseEdit.isDisable = !playlistMapping.validate()
+                setter.invoke(newValue)
             }
         }
 
-        val txtInputToEtterMap = mapOf<TextField, (String) -> Unit>(
-            txtName to { playlistMapping.name = it },
-            txtSourceId to { playlistMapping.sourceResource.id = it },
-            txtTargetId to { playlistMapping.targetResource.id = it }
+        val txtInputToSetterMap = mapOf<TextField, (String) -> Unit>(
+            nameTextField to { playlistMapping.name.set(it) },
+            sourceIdTextField to { playlistMapping.sourceResource.id.set(it) },
+            targetIdTextField to { playlistMapping.targetResource.id.set(it) }
         )
 
-        for ((textField, etter) in txtInputToEtterMap) {
+        for ((textField, setter) in txtInputToSetterMap) {
             textField.textProperty().addListener { _, _, newText ->
-                etter.invoke(newText)
-                btnUseEdit.isDisable = !playlistMapping.validate()
+                setter.invoke(newText)
             }
         }
 
-        txtName.textProperty().addListener { _, _, newValue -> tldpnPlaylistMapping.text = newValue }
+        nameTextField.textProperty().addListener { _, _, newValue ->
+            playlistMappingTitledPane.text = newValue
+        }
+    }
+
+    private fun updateEditButton() {
+        useEditButton.isDisable =
+            !playlistMapping.sourceResource.isValid.value || !playlistMapping.targetResource.isValid.value
     }
 
     @FXML
     private fun delete() {
         SpotilistCache.playlistMappings.remove(playlistMapping)
-        MainApp.dashboardController.updatePlaylistMappings()
     }
 
     @FXML
     private fun toggleUseEdit() {
-        if (btnUseEdit.text == "Use") {
-            btnUseEdit.text = "Edit"
-            grdpnPlaylistMappig.isDisable = true
-            lblData.text = "Updating data..."
-            updateData()
-        } else if (btnUseEdit.text == "Edit") {
-            btnUseEdit.text = "Use"
-            grdpnPlaylistMappig.isDisable = false
-            lblData.text = ""
-        }
+        playlistMapping.isEnabled.set(!playlistMapping.isEnabled.value)
+        Persistence.save(PersistenceTypes.CACHE)
     }
 
     private fun updateData() {
-        val sourcePlaylist = SpotilistProvider.getPlaylist(playlistMapping.sourceResource)
-        val targetPlaylist = SpotilistProvider.getPlaylist(playlistMapping.targetResource)
+        dataLabel.text = "Updating data..."
 
-        lblData.text = "Source playlist name: " + sourcePlaylist.name +
+        val sourcePlaylist =
+            SpotilistProviderType.valueOf(playlistMapping.sourceResource.provider.value).type.getPlaylist(
+                playlistMapping.sourceResource.id.value
+            )
+        val targetPlaylist =
+            SpotilistProviderType.valueOf(playlistMapping.targetResource.provider.value).type.getPlaylist(
+                playlistMapping.targetResource.id.value
+            )
+
+        dataLabel.text = "Source playlist name: " + sourcePlaylist.name +
                 "\nTarget playlist name: " + targetPlaylist.name +
                 "\nSource playlist track count: " + sourcePlaylist.tracks?.size +
                 "\nTarget playlist track count: " + targetPlaylist.tracks?.size

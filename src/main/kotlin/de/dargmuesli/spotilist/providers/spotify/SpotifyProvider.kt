@@ -33,20 +33,42 @@ object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
         get() = Dispatchers.JavaFx
 
     private val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
-        .setClientId(SpotifyConfig.clientId.value)
-        .setClientSecret(SpotifyConfig.clientSecret.value)
-        .setRedirectUri(URI(SpotifyConfig.redirectUri.value))
-    var spotifyApi: SpotifyApi = spotifyApiBuilder.build()
+    private val spotifyApi: SpotifyApi
+        get() = spotifyApiBuilder.build()
 
     init {
-        if (!SpotifyCache.accessToken.value.isNullOrEmpty()) {
-            spotifyApi = spotifyApiBuilder
-                .setAccessToken(SpotifyCache.accessToken.value)
-                .build()
+        SpotifyCache.accessToken.addListener { _ ->
+            createSpotifyApiBuilder()
+        }
+
+        SpotifyConfig.clientId.addListener { _ ->
+            createSpotifyApiBuilder()
+        }
+
+        SpotifyConfig.clientSecret.addListener { _ ->
+            createSpotifyApiBuilder()
+        }
+
+        SpotifyConfig.redirectUri.addListener { _ ->
+            createSpotifyApiBuilder()
+        }
+
+        createSpotifyApiBuilder()
+    }
+
+    private fun createSpotifyApiBuilder() {
+        spotifyApiBuilder
+            .setClientId(SpotifyConfig.clientId.value)
+            .setClientSecret(SpotifyConfig.clientSecret.value)
+            .setAccessToken(SpotifyCache.accessToken.value)
+
+        if (!SpotifyConfig.redirectUri.value.isNullOrEmpty()) {
+            spotifyApiBuilder
+                .setRedirectUri(URI(SpotifyConfig.redirectUri.value))
         }
     }
 
-    fun openAuthorization() {
+    fun authorize() {
         if (SpotifyConfig.authorizationCode.value.isNullOrEmpty()) {
             val authorizationCodeUri = spotifyApi.authorizationCodeUri()
                 .build().execute()
@@ -115,7 +137,7 @@ object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
     override fun isPlaylistIdValid(playlistId: String): Boolean {
         val errorMessage = "Playlist validation failed!"
 
-        if (playlistId == "") {
+        if (playlistId == "" || !isAuthorized()) {
             return false
         }
 
@@ -137,10 +159,10 @@ object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
     }
 
     override fun isAuthorized(): Boolean {
-        if (SpotifyCache.accessToken.value == null) {
-            return false
+        if (SpotifyCache.accessTokenExpiresAt.value > 0 && SpotifyCache.accessTokenExpiresAt.value > Date().time / 1000) {
+            return true
         }
 
-        return true
+        return false
     }
 }

@@ -110,7 +110,7 @@ class SettingsController : Initializable {
 
     @FXML
     private fun openAuthorization() {
-        SpotifyProvider.openAuthorization()
+        SpotifyProvider.authorize()
 
         if (SpotifyCache.accessTokenExpiresAt.value > Date().time / 1000) {
             SpotifyConfig.authorizationCode.set("")

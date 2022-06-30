@@ -1,48 +1,83 @@
 package de.dargmuesli.spotilist.models
 
+import de.dargmuesli.spotilist.persistence.Persistence
+import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.persistence.SpotilistCache
-import de.dargmuesli.spotilist.providers.SpotilistProvider
+import de.dargmuesli.spotilist.providers.SpotilistProviderType
 import de.dargmuesli.spotilist.util.Util
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleStringProperty
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
-@Serializable
+@Serializable(with = PlaylistMapping.Serializer::class)
 data class PlaylistMapping(
-    var name: String = Util.getUnusedPlaylistMappingName(SpotilistCache.playlistMappings),
+    val name: SimpleStringProperty = SimpleStringProperty(Util.getUnusedPlaylistMappingName(SpotilistCache.playlistMappings)).also {
+        it.addListener { _ ->
+            Persistence.save(PersistenceTypes.CACHE)
+        }
+    },
     var sourceResource: PlaylistMappingResource = PlaylistMappingResource(),
     var targetResource: PlaylistMappingResource = PlaylistMappingResource(),
-    var blacklistSource: Array<String> = arrayOf(),
-    var blacklistTarget: Array<String> = arrayOf()
+    var blacklistSource: ArrayList<String> = arrayListOf(),
+    var blacklistTarget: ArrayList<String> = arrayListOf(),
+    val isEnabled: SimpleBooleanProperty = SimpleBooleanProperty().also {
+        it.addListener { _ ->
+            Persistence.save(PersistenceTypes.CACHE)
+        }
+    }
 ) {
 
-    fun validate(): Boolean {
-        return name != ""
-                && sourceResource.provider != SpotilistProvider.NONE
-                && SpotilistProvider.isPlaylistMappingValid(sourceResource)
-                && targetResource.provider != SpotilistProvider.NONE
-                && SpotilistProvider.isPlaylistMappingValid(targetResource)
+    fun isValid(): Boolean {
+        return !name.value.isNullOrEmpty()
+                && sourceResource.provider.value != SpotilistProviderType.NONE.name
+                && sourceResource.isValid.value
+                && targetResource.provider.value != SpotilistProviderType.NONE.name
+                && targetResource.isValid.value
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+    object Serializer : KSerializer<PlaylistMapping> {
+        override val descriptor: SerialDescriptor = PlaylistMappingSurrogate.serializer().descriptor
 
-        other as PlaylistMapping
+        override fun serialize(encoder: Encoder, value: PlaylistMapping) {
+            encoder.encodeSerializableValue(
+                PlaylistMappingSurrogate.serializer(),
+                PlaylistMappingSurrogate(
+                    value.name.value,
+                    value.sourceResource,
+                    value.targetResource,
+                    value.blacklistSource,
+                    value.blacklistTarget,
+                    value.isEnabled.value
+                )
+            )
+        }
 
-        if (name != other.name) return false
-        if (sourceResource != other.sourceResource) return false
-        if (targetResource != other.targetResource) return false
-        if (!blacklistSource.contentEquals(other.blacklistSource)) return false
-        if (!blacklistTarget.contentEquals(other.blacklistTarget)) return false
-
-        return true
+        override fun deserialize(decoder: Decoder): PlaylistMapping {
+            val playlistMapping = decoder.decodeSerializableValue(PlaylistMappingSurrogate.serializer())
+            return PlaylistMapping(
+                SimpleStringProperty(playlistMapping.name),
+                playlistMapping.sourceResource,
+                playlistMapping.targetResource,
+                playlistMapping.blacklistSource,
+                playlistMapping.blacklistTarget,
+                SimpleBooleanProperty(playlistMapping.isEnabled)
+            )
+        }
     }
 
-    override fun hashCode(): Int {
-        var result = name.hashCode()
-        result = 31 * result + sourceResource.hashCode()
-        result = 31 * result + targetResource.hashCode()
-        result = 31 * result + blacklistSource.contentHashCode()
-        result = 31 * result + blacklistTarget.contentHashCode()
-        return result
-    }
+    @Serializable
+    @SerialName("PlaylistMapping")
+    private data class PlaylistMappingSurrogate(
+        val name: String?,
+        val sourceResource: PlaylistMappingResource,
+        val targetResource: PlaylistMappingResource,
+        val blacklistSource: ArrayList<String>,
+        val blacklistTarget: ArrayList<String>,
+        val isEnabled: Boolean
+    )
 }

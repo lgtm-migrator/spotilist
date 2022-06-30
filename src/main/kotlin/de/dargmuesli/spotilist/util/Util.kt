@@ -11,7 +11,7 @@ object Util {
         var matcher: Matcher
 
         for (playlistMapping in playlistMappingList) {
-            matcher = pattern.matcher(playlistMapping.name)
+            matcher = pattern.matcher(playlistMapping.name.value)
 
             while (matcher.find()) {
                 val currentMaxIndex = Integer.valueOf(matcher.group(1))

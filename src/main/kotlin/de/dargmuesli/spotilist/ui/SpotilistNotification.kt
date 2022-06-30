@@ -40,7 +40,7 @@ object SpotilistNotification : CoroutineScope {
     private fun displayPopup(text: String, title: String = "Notification") {
         NotificationController.notifications.add(text)
         SpotilistStage(
-            "/de/dargmuesli/spotilist/fxml/Notification.fxml",
+            "/de/dargmuesli/spotilist/fxml/notification.fxml",
             Modality.APPLICATION_MODAL,
             title,
             true

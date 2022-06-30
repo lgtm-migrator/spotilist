@@ -39,12 +39,12 @@ class DashboardController : Initializable {
 
     @FXML
     private fun menuFileSettingsAction() {
-        SpotilistStage("/de/dargmuesli/spotilist/fxml/Settings.fxml", Modality.APPLICATION_MODAL, "Settings").show()
+        SpotilistStage("/de/dargmuesli/spotilist/fxml/settings.fxml", Modality.APPLICATION_MODAL, "Settings").show()
     }
 
     private fun playlistMappingAdd(playlistMapping: PlaylistMapping) {
         val loader =
-            FXMLLoader(MainApp::class.java.getResource("fxml/PlaylistMapping.fxml"))
+            FXMLLoader(MainApp::class.java.getResource("fxml/playlistMapping.fxml"))
         playlistMappingsAccordion.panes.add(loader.load())
         val controller: PlaylistMappingController = loader.getController()
         controller.playlistMapping = playlistMapping

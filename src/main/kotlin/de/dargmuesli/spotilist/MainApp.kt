@@ -19,7 +19,7 @@ class MainApp : Application() {
         Companion.stage = stage
 
         try {
-            val dashboardLoader = FXMLLoader(MainApp::class.java.getResource("fxml/Dashboard.fxml"), RESOURCES)
+            val dashboardLoader = FXMLLoader(MainApp::class.java.getResource("fxml/dashboard.fxml"), RESOURCES)
             val dashboard = dashboardLoader.load<Parent>()
             dashboardController = dashboardLoader.getController()
 

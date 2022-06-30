@@ -11,10 +11,14 @@ import javafx.fxml.Initializable
 import javafx.scene.control.Accordion
 import javafx.stage.Modality
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.net.URL
 import java.util.*
 
 class DashboardController : Initializable {
+    companion object {
+        val LOGGER: Logger = LogManager.getLogger()
+    }
 
     @FXML
     private lateinit var playlistMappingsAccordion: Accordion
@@ -48,7 +52,7 @@ class DashboardController : Initializable {
 
     private fun playlistMappingRemove(playlistMapping: PlaylistMapping) {
         playlistMappingsAccordion.panes.forEach {
-            LogManager.getLogger().info(it.content)
+            LOGGER.info(it.content)
         }
     }
 }

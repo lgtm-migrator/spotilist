@@ -9,6 +9,7 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.IOException
 import java.util.*
 
@@ -18,7 +19,7 @@ class MainApp : Application() {
         Companion.stage = stage
 
         try {
-            val dashboardLoader = FXMLLoader(MainApp::class.java.getResource("fxml/Dashboard.fxml"), resources)
+            val dashboardLoader = FXMLLoader(MainApp::class.java.getResource("fxml/Dashboard.fxml"), RESOURCES)
             val dashboard = dashboardLoader.load<Parent>()
             dashboardController = dashboardLoader.getController()
 
@@ -27,7 +28,7 @@ class MainApp : Application() {
             stage.scene = scene
             stage.show()
         } catch (e: IOException) {
-            LogManager.getLogger().error("Loading the dashboard failed!", e)
+            LOGGER.error("Loading the dashboard failed!", e)
         }
 
         Persistence.load()
@@ -36,7 +37,8 @@ class MainApp : Application() {
     companion object {
         lateinit var stage: Stage
         lateinit var dashboardController: DashboardController
-        val resources: ResourceBundle = ResourceBundle.getBundle("i18n", Locale.getDefault())
+        val LOGGER: Logger = LogManager.getLogger()
+        val RESOURCES: ResourceBundle = ResourceBundle.getBundle("i18n", Locale.getDefault())
 
         internal const val APPLICATION_TITLE = "Spotilist"
 

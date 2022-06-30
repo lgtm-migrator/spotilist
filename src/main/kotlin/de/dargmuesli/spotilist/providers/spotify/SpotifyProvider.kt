@@ -35,6 +35,7 @@ object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
     private val spotifyApiBuilder: SpotifyApi.Builder = SpotifyApi.builder()
     private val spotifyApi: SpotifyApi
         get() = spotifyApiBuilder.build()
+    private val LOGGER = LogManager.getLogger()
 
     init {
         SpotifyCache.accessToken.addListener { _ ->
@@ -115,6 +116,10 @@ object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
             val trackAlbumArtists: MutableList<Artist> = mutableListOf()
             val trackArtists: MutableList<Artist> = mutableListOf()
 
+            if (track.linkedFrom != null) {
+                LOGGER.warn(track.name + "might differ! " + track.linkedFrom.id)
+            }
+
             track.album.artists.forEach { artistSimplified ->
                 trackAlbumArtists.add(Artist(name = artistSimplified.name))
             }
@@ -145,13 +150,13 @@ object SpotifyProvider : ISpotilistProviderAuthorizable, CoroutineScope {
             spotifyApi.getPlaylist(playlistId).build().execute()
             true
         } catch (e: IOException) {
-            LogManager.getLogger().error(errorMessage, e)
+            LOGGER.error(errorMessage, e)
             false
         } catch (e: UnauthorizedException) {
             throw e
         } catch (e: SpotifyWebApiException) {
             if (e !is NotFoundException) {
-                LogManager.getLogger().error("$errorMessage SpotifyWebApiException is not a NotFoundException.", e)
+                LOGGER.error("$errorMessage SpotifyWebApiException is not a NotFoundException.", e)
             }
 
             false

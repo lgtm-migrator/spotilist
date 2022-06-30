@@ -9,6 +9,7 @@ import javafx.scene.image.Image
 import javafx.stage.Modality
 import javafx.stage.Stage
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 import java.io.IOException
 
@@ -22,7 +23,7 @@ class SpotilistStage(
 ) : Stage() {
     init {
         try {
-            val dashboard = FXMLLoader.load<Parent>(MainApp::class.java.getResource(fxmlPath), MainApp.resources)
+            val dashboard = FXMLLoader.load<Parent>(MainApp::class.java.getResource(fxmlPath), MainApp.RESOURCES)
             val scene = Scene(dashboard)
 
             if (minHeight != Control.USE_COMPUTED_SIZE) {
@@ -45,11 +46,12 @@ class SpotilistStage(
                 this.initOwner(Stage())
             }
         } catch (e: IOException) {
-            LogManager.getLogger().error("Construction of stage failed!", e)
+            LOGGER.error("Construction of stage failed!", e)
         }
     }
 
     companion object {
+        val LOGGER: Logger = LogManager.getLogger()
         internal fun makeSpotilistStage(stage: Stage) {
             stage.title = MainApp.APPLICATION_TITLE
             stage.icons.add(Image(MainApp().javaClass.getResourceAsStream("/de/dargmuesli/spotilist/icons/icon.png")))

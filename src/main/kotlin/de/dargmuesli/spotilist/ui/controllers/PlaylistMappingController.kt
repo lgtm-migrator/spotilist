@@ -3,7 +3,7 @@ package de.dargmuesli.spotilist.ui.controllers
 import de.dargmuesli.spotilist.models.PlaylistMapping
 import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.persistence.PersistenceTypes
-import de.dargmuesli.spotilist.persistence.SpotilistCache
+import de.dargmuesli.spotilist.persistence.SpotilistConfig
 import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.providers.SpotilistProviderType
 import javafx.collections.FXCollections.observableArrayList
@@ -125,13 +125,13 @@ class PlaylistMappingController : Initializable {
 
     @FXML
     private fun delete() {
-        SpotilistCache.playlistMappings.remove(playlistMapping)
+        SpotilistConfig.playlistMappings.remove(playlistMapping)
     }
 
     @FXML
     private fun toggleUseEdit() {
         playlistMapping.isEnabled.set(!playlistMapping.isEnabled.value)
-        Persistence.save(PersistenceTypes.CACHE)
+        Persistence.save(PersistenceTypes.CONFIG)
     }
 
     private fun updateData() {

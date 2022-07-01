@@ -2,7 +2,7 @@ package de.dargmuesli.spotilist.models
 
 import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.persistence.PersistenceTypes
-import de.dargmuesli.spotilist.persistence.SpotilistCache
+import de.dargmuesli.spotilist.persistence.SpotilistConfig
 import de.dargmuesli.spotilist.providers.SpotilistProviderType
 import de.dargmuesli.spotilist.util.Util
 import javafx.beans.property.SimpleBooleanProperty
@@ -16,9 +16,9 @@ import kotlinx.serialization.encoding.Encoder
 
 @Serializable(with = PlaylistMapping.Serializer::class)
 data class PlaylistMapping(
-    val name: SimpleStringProperty = SimpleStringProperty(Util.getUnusedPlaylistMappingName(SpotilistCache.playlistMappings)).also {
+    val name: SimpleStringProperty = SimpleStringProperty(Util.getUnusedPlaylistMappingName(SpotilistConfig.playlistMappings)).also {
         it.addListener { _ ->
-            Persistence.save(PersistenceTypes.CACHE)
+            Persistence.save(PersistenceTypes.CONFIG)
         }
     },
     var sourceResource: PlaylistMappingResource = PlaylistMappingResource(),
@@ -27,7 +27,7 @@ data class PlaylistMapping(
     var blacklistTarget: ArrayList<String> = arrayListOf(),
     val isEnabled: SimpleBooleanProperty = SimpleBooleanProperty().also {
         it.addListener { _ ->
-            Persistence.save(PersistenceTypes.CACHE)
+            Persistence.save(PersistenceTypes.CONFIG)
         }
     }
 ) {

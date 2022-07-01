@@ -1,7 +1,10 @@
 package de.dargmuesli.spotilist.persistence
 
+import de.dargmuesli.spotilist.models.PlaylistMapping
 import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
 import de.dargmuesli.spotilist.persistence.config.YouTubeConfig
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,6 +17,8 @@ object SpotilistConfig : AbstractSerializable() {
     var spotify: SpotifyConfig = SpotifyConfig
     var youTube: YouTubeConfig = YouTubeConfig
 
+    var playlistMappings: ObservableList<PlaylistMapping> = FXCollections.observableArrayList()
+
     object Serializer : KSerializer<SpotilistConfig> {
         override val descriptor: SerialDescriptor = SpotilistConfigSurrogate.serializer().descriptor
 
@@ -22,7 +27,8 @@ object SpotilistConfig : AbstractSerializable() {
                 SpotilistConfigSurrogate.serializer(),
                 SpotilistConfigSurrogate(
                     spotify,
-                    youTube
+                    youTube,
+                    playlistMappings
                 )
             )
         }
@@ -31,6 +37,7 @@ object SpotilistConfig : AbstractSerializable() {
             val spotilistConfig = decoder.decodeSerializableValue(SpotilistConfigSurrogate.serializer())
             spotify = spotilistConfig.spotify
             youTube = spotilistConfig.youTube
+            playlistMappings.addAll(spotilistConfig.playlistMappings)
             return SpotilistConfig
         }
     }
@@ -39,6 +46,7 @@ object SpotilistConfig : AbstractSerializable() {
     @SerialName("SpotilistConfig")
     private data class SpotilistConfigSurrogate(
         val spotify: SpotifyConfig,
-        val youTube: YouTubeConfig
+        val youTube: YouTubeConfig,
+        val playlistMappings: List<PlaylistMapping>
     )
 }

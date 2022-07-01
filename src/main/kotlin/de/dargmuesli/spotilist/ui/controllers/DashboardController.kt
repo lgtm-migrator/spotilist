@@ -2,7 +2,7 @@ package de.dargmuesli.spotilist.ui.controllers
 
 import de.dargmuesli.spotilist.MainApp
 import de.dargmuesli.spotilist.models.PlaylistMapping
-import de.dargmuesli.spotilist.persistence.SpotilistCache
+import de.dargmuesli.spotilist.persistence.SpotilistConfig
 import de.dargmuesli.spotilist.ui.SpotilistStage
 import javafx.collections.ListChangeListener
 import javafx.fxml.FXML
@@ -24,7 +24,7 @@ class DashboardController : Initializable {
     private lateinit var playlistMappingsAccordion: Accordion
 
     override fun initialize(url: URL?, rb: ResourceBundle?) {
-        SpotilistCache.playlistMappings.addListener(ListChangeListener { playlistMappingChange ->
+        SpotilistConfig.playlistMappings.addListener(ListChangeListener { playlistMappingChange ->
             while (playlistMappingChange.next()) {
                 playlistMappingChange.addedSubList.forEach(::playlistMappingAdd)
                 playlistMappingChange.removed.forEach(::playlistMappingRemove)
@@ -34,7 +34,7 @@ class DashboardController : Initializable {
 
     @FXML
     private fun addPlaylistMapping() {
-        SpotilistCache.playlistMappings.add(PlaylistMapping())
+        SpotilistConfig.playlistMappings.add(PlaylistMapping())
     }
 
     @FXML

@@ -46,29 +46,31 @@ object SpotifyProvider :
 
         return spotifyPlaylistItems.map { spotifyPlaylistTrack: se.michaelthelin.spotify.model_objects.specification.PlaylistTrack ->
             val track = spotifyPlaylistTrack.track as se.michaelthelin.spotify.model_objects.specification.Track
-            val trackAlbumType = AlbumType.valueOf(track.album.albumType.name)
-            val trackAlbumArtists = mutableListOf<Artist>()
-            val trackArtists = mutableListOf<Artist>()
 
             if (track.linkedFrom != null) {
                 LOGGER.warn(track.name + "might differ! " + track.linkedFrom.id)
             }
 
-            track.album.artists.forEach { artistSimplified ->
-                trackAlbumArtists.add(Artist(name = artistSimplified.name))
-            }
-
-            track.artists.forEach { artistSimplified ->
-                trackArtists.add(Artist(name = artistSimplified.name))
-            }
-
-            val trackAlbumName = track.album.name
-            val trackAlbum = Album(albumType = trackAlbumType, artists = trackAlbumArtists, name = trackAlbumName)
-            val trackDurationMs = spotifyPlaylistTrack.track.durationMs
-            val trackName = spotifyPlaylistTrack.track.name
-
-            Track(trackAlbum, trackArtists, trackDurationMs.toLong(), trackName)
+            Track(
+                album = Album(
+                    albumType = AlbumType.valueOf(track.album.albumType.name),
+                    artists = track.album.artists.map { artistSimplified ->
+                        Artist(name = artistSimplified.name)
+                    },
+                    name = track.album.name
+                ),
+                artists = track.artists.map { artistSimplified ->
+                    Artist(name = artistSimplified.name)
+                },
+                durationMs = spotifyPlaylistTrack.track.durationMs.toLong(),
+                id = spotifyPlaylistTrack.track.id,
+                name = spotifyPlaylistTrack.track.name
+            )
         }
+    }
+
+    override fun isPlaylistIdValid(playlistId: String): Boolean {
+        return SpotifyCache.playlistData.containsKey(playlistId) || getPlaylist(playlistId) != null
     }
 
     override fun isAuthorized(): Boolean {

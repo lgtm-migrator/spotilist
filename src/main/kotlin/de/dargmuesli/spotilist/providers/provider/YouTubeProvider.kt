@@ -101,6 +101,10 @@ object YouTubeProvider :
         }
     }
 
+    override fun isPlaylistIdValid(playlistId: String): Boolean {
+        return YouTubeCache.playlistData.containsKey(playlistId) || getPlaylist(playlistId) != null
+    }
+
     override fun isAuthorized(): Boolean {
         return !YouTubeConfig.apiKey.value.isNullOrEmpty()
     }

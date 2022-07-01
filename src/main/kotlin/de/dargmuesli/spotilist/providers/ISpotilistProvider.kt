@@ -20,7 +20,5 @@ interface ISpotilistProvider<P, T> {
         return null
     }
 
-    fun isPlaylistIdValid(playlistId: String): Boolean {
-        return getPlaylist(playlistId) != null
-    }
+    fun isPlaylistIdValid(playlistId: String): Boolean
 }

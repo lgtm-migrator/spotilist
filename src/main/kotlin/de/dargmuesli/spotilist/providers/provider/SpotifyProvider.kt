@@ -32,7 +32,9 @@ object SpotifyProvider :
         return getAllPagingItems(spotifyApi.getPlaylistsItems(playlistId))
             .ifEmpty { null }
             ?.onEach {
-                SpotifyCache.playlistItemData[it.track.id] = it
+                if (!SpotifyCache.playlistItemData.containsKey(it.track.id)) {
+                    SpotifyCache.playlistItemData[it.track.id] = it
+                }
             }
     }
 

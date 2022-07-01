@@ -3,7 +3,6 @@ package de.dargmuesli.spotilist.models
 import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.persistence.SpotilistConfig
-import de.dargmuesli.spotilist.providers.SpotilistProviderType
 import de.dargmuesli.spotilist.util.Util
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty

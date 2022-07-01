@@ -72,7 +72,10 @@ object YouTubeProvider :
 
             for (playlistItem in playlistItemListResponse.items) {
                 playlistItems.add(playlistItem)
-                YouTubeCache.playlistItemData[playlistItem.contentDetails.videoId] = playlistItem
+
+                if (!YouTubeCache.playlistItemData.containsKey(playlistItem.contentDetails.videoId)) {
+                    YouTubeCache.playlistItemData[playlistItem.contentDetails.videoId] = playlistItem
+                }
             }
 
             nextPageToken = playlistItemListResponse.nextPageToken

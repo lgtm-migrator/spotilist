@@ -61,14 +61,12 @@ class PlaylistMappingController : Initializable {
             updateEditButton()
         }
 
-        newValue.isEnabled.addListener { _ ->
-            if (playlistMapping.isEnabled.value) {
-                useEditButton.text = "Edit"
-                playlistMappingGridPane.isDisable = true
+        newValue.isEnabled.addListener { _, _, new ->
+            updateEditButton()
+
+            if (new) {
                 updateData()
             } else {
-                useEditButton.text = "Use"
-                playlistMappingGridPane.isDisable = false
                 dataLabel.text = ""
             }
         }
@@ -109,7 +107,7 @@ class PlaylistMappingController : Initializable {
 
         for ((textField, setter) in txtInputToSetterMap) {
             textField.textProperty().addListener { _, _, newText ->
-                setter.invoke(newText)
+                setter.invoke(newText ?: "")
             }
         }
 
@@ -121,6 +119,14 @@ class PlaylistMappingController : Initializable {
     private fun updateEditButton() {
         useEditButton.isDisable =
             !playlistMapping.sourceResource.isValid.value || !playlistMapping.targetResource.isValid.value
+
+        if (playlistMapping.isEnabled.value) {
+            useEditButton.text = "Edit"
+            playlistMappingGridPane.isDisable = true
+        } else {
+            useEditButton.text = "Use"
+            playlistMappingGridPane.isDisable = false
+        }
     }
 
     @FXML

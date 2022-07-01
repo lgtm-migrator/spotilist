@@ -1,12 +1,16 @@
 package de.dargmuesli.spotilist.providers.provider
 
+import de.dargmuesli.spotilist.models.music.Artist
 import de.dargmuesli.spotilist.models.music.Playlist
 import de.dargmuesli.spotilist.models.music.Track
 import de.dargmuesli.spotilist.providers.ISpotilistProvider
+import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.nio.file.Paths
 
 object FileSystemProvider : ISpotilistProvider<File, File> {
+    private val LOGGER = LogManager.getLogger()
+
     override fun getProviderPlaylist(playlistId: String): File? {
         val file = File(playlistId)
         return if (file.isDirectory) file else null
@@ -27,8 +31,17 @@ object FileSystemProvider : ISpotilistProvider<File, File> {
     }
 
     override fun getPlaylistItems(playlistId: String): List<Track>? {
-        return getProviderPlaylistItems(playlistId)?.map {
-            Track(name = it.nameWithoutExtension)
+        return getProviderPlaylistItems(playlistId)?.map { file ->
+            val nameParts = file.nameWithoutExtension.split(" - ")
+
+            if (nameParts.size < 2) {
+                LOGGER.error("Name parts are not at least two for \"${file.nameWithoutExtension}\"!")
+            }
+
+            val artistNames = nameParts[0].split(", ")
+            Track(
+                name = nameParts.subList(1, nameParts.size).joinToString(" - "),
+                artists = artistNames.map { Artist(name = it) })
         }
 
 //        path.toFile().listFiles { file -> file.isFile }!!.forEach { file ->

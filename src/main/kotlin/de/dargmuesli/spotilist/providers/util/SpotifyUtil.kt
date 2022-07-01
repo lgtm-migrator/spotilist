@@ -1,5 +1,6 @@
 package de.dargmuesli.spotilist.providers.util
 
+import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.persistence.config.SpotifyConfig
 import de.dargmuesli.spotilist.ui.SpotilistNotification
@@ -40,7 +41,13 @@ object SpotifyUtil : CoroutineScope {
             createSpotifyApiBuilder()
         }
 
-        createSpotifyApiBuilder()
+        if (Persistence.isInitialized.value) {
+            createSpotifyApiBuilder()
+        } else {
+            Persistence.isInitialized.addListener { _ ->
+                createSpotifyApiBuilder()
+            }
+        }
     }
 
     private fun createSpotifyApiBuilder() {

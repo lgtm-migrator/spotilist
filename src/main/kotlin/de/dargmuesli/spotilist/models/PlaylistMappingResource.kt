@@ -1,5 +1,6 @@
 package de.dargmuesli.spotilist.models
 
+import de.dargmuesli.spotilist.persistence.Persistence
 import de.dargmuesli.spotilist.providers.SpotilistProviderType
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
@@ -25,12 +26,18 @@ data class PlaylistMappingResource(
             updateValidity()
         }
 
-        updateValidity()
+        if (Persistence.isInitialized.value) {
+            updateValidity()
+        } else {
+            Persistence.isInitialized.addListener { _ ->
+                updateValidity()
+            }
+        }
     }
 
     private fun updateValidity() {
         val provider = SpotilistProviderType.valueOf(provider.value)
-        isValid.set(SpotilistProviderType.isValid(provider) && provider.type.isPlaylistIdValid(id.value))
+        isValid.set(SpotilistProviderType.isValid(provider) && provider.type.isPlaylistIdValid(id.value ?: ""))
     }
 
     object Serializer : KSerializer<PlaylistMappingResource> {

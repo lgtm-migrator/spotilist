@@ -45,23 +45,23 @@ class PlaylistMappingController : Initializable {
     @FXML
     private lateinit var dataLabel: Label
 
-    var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, newValue ->
-        playlistMappingTitledPane.text = newValue.name.value
-        nameTextField.text = newValue.name.value
-        sourceProviderCombobox.value = newValue.sourceResource.provider.value
-        sourceIdTextField.text = newValue.sourceResource.id.value
-        targetProviderCombobox.value = newValue.targetResource.provider.value
-        targetIdTextField.text = newValue.targetResource.id.value
+    var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, new ->
+        playlistMappingTitledPane.text = new.name.value
+        nameTextField.text = new.name.value
+        sourceProviderCombobox.value = new.sourceResource.provider.value
+        sourceIdTextField.text = new.sourceResource.id.value
+        targetProviderCombobox.value = new.targetResource.provider.value
+        targetIdTextField.text = new.targetResource.id.value
 
-        newValue.sourceResource.isValid.addListener { _ ->
+        new.sourceResource.isValid.addListener { _ ->
             updateEditButton()
         }
 
-        newValue.targetResource.isValid.addListener { _ ->
+        new.targetResource.isValid.addListener { _ ->
             updateEditButton()
         }
 
-        newValue.isEnabled.addListener { _, _, new ->
+        new.isEnabled.addListener { _, _, new ->
             updateEditButton()
 
             if (new) {

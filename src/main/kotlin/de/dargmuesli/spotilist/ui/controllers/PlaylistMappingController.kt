@@ -158,5 +158,21 @@ class PlaylistMappingController : Initializable {
                 "\nTarget playlist name: " + targetPlaylist.name +
                 "\nSource playlist track count: " + sourcePlaylist.tracks?.size +
                 "\nTarget playlist track count: " + targetPlaylist.tracks?.size
+
+        if (targetPlaylist.tracks != null) {
+            val notFound = sourcePlaylist.tracks?.filter {
+                for (targetTrack in targetPlaylist.tracks) {
+                    if (it.name?.replace(Regex("[<>:\"/\\\\|?*]"), "_") == targetTrack.name) {
+                        return@filter false
+                    }
+                }
+
+                return@filter true
+            }?.joinToString("\n") { track ->
+                track.artists?.let { artists -> artists.map { it.name }.joinToString() + " - " } + track.name
+            }
+
+            dataLabel.text += if (notFound.isNullOrEmpty()) "\nAll found in target!" else "\nNot found in target:\n${notFound}"
+        }
     }
 }

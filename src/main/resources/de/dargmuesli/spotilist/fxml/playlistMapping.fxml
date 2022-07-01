@@ -46,6 +46,14 @@
         </GridPane>
         <Button fx:id="useEditButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
                 onAction="#toggleUseEdit" text="Use"/>
-        <Label fx:id="dataLabel"/>
+        <ScrollPane minHeight="-Infinity" prefHeight="200.0">
+            <content>
+                <AnchorPane>
+                    <children>
+                        <TextArea fx:id="dataLabel"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
     </VBox>
 </TitledPane>

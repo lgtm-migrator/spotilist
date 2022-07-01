@@ -9,6 +9,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import se.michaelthelin.spotify.model_objects.specification.Playlist
+import java.util.*
 
 class SpotifyPlaylistSerializer {
     object Serializer : KSerializer<Playlist> {
@@ -18,6 +19,7 @@ class SpotifyPlaylistSerializer {
             encoder.encodeString(
                 GsonBuilder()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .registerTypeAdapter(Date::class.java, GsonUTCDateAdapter())
                     .create().toJson(value)
             )
         }

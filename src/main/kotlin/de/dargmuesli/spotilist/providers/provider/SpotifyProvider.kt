@@ -71,22 +71,6 @@ object SpotifyProvider :
         }
     }
 
-//    try {
-//        spotifyApi.getPlaylist(playlistId).build().execute()
-//        true
-//    } catch (e: IOException) {
-//        LOGGER.error(errorMessage, e)
-//        false
-//    } catch (e: UnauthorizedException) {
-//        throw e
-//    } catch (e: SpotifyWebApiException) {
-//        if (e !is NotFoundException) {
-//            LOGGER.error("$errorMessage SpotifyWebApiException is not a NotFoundException.", e)
-//        }
-//
-//        false
-//    }
-
     override fun isAuthorized(): Boolean {
         if (SpotifyCache.accessTokenExpiresAt.value > 0 && SpotifyCache.accessTokenExpiresAt.value > Date().time / 1000) {
             return true

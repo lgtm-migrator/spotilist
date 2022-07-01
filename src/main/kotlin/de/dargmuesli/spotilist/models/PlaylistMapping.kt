@@ -32,14 +32,6 @@ data class PlaylistMapping(
     }
 ) {
 
-    fun isValid(): Boolean {
-        return !name.value.isNullOrEmpty()
-                && sourceResource.provider.value != SpotilistProviderType.NONE.name
-                && sourceResource.isValid.value
-                && targetResource.provider.value != SpotilistProviderType.NONE.name
-                && targetResource.isValid.value
-    }
-
     object Serializer : KSerializer<PlaylistMapping> {
         override val descriptor: SerialDescriptor = PlaylistMappingSurrogate.serializer().descriptor
 

@@ -16,6 +16,7 @@ import java.util.*
 object SpotifyProvider :
     ISpotilistProviderAuthorizable<se.michaelthelin.spotify.model_objects.specification.Playlist, se.michaelthelin.spotify.model_objects.specification.PlaylistTrack> {
     private val LOGGER = LogManager.getLogger()
+    private val PLAYLIST_ID_REGEX = Regex("^[a-zA-Z\\d]{22}$")
 
     override fun getProviderPlaylist(playlistId: String): se.michaelthelin.spotify.model_objects.specification.Playlist? {
         return if (SpotifyCache.playlistData.containsKey(playlistId)) {
@@ -72,7 +73,7 @@ object SpotifyProvider :
     }
 
     override fun isPlaylistIdValid(playlistId: String): Boolean {
-        return SpotifyCache.playlistData.containsKey(playlistId) || getPlaylist(playlistId) != null
+        return PLAYLIST_ID_REGEX.matches(playlistId)
     }
 
     override fun isAuthorized(): Boolean {

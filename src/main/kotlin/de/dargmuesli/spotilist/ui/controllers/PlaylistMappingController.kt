@@ -6,6 +6,7 @@ import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.persistence.SpotilistConfig
 import de.dargmuesli.spotilist.persistence.cache.SpotifyCache
 import de.dargmuesli.spotilist.providers.SpotilistProviderType
+import de.dargmuesli.spotilist.util.Util
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
@@ -43,28 +44,28 @@ class PlaylistMappingController : Initializable {
     private lateinit var useEditButton: Button
 
     @FXML
-    private lateinit var dataLabel: Label
+    private lateinit var dataLabel: TextArea
 
-    var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, new ->
-        playlistMappingTitledPane.text = new.name.value
-        nameTextField.text = new.name.value
-        sourceProviderCombobox.value = new.sourceResource.provider.value
-        sourceIdTextField.text = new.sourceResource.id.value
-        targetProviderCombobox.value = new.targetResource.provider.value
-        targetIdTextField.text = new.targetResource.id.value
+    var playlistMapping: PlaylistMapping by Delegates.observable(PlaylistMapping()) { _, _, newPlaylistMapping ->
+        playlistMappingTitledPane.text = newPlaylistMapping.name.value
+        nameTextField.text = newPlaylistMapping.name.value
+        sourceProviderCombobox.value = newPlaylistMapping.sourceResource.provider.value
+        sourceIdTextField.text = newPlaylistMapping.sourceResource.id.value
+        targetProviderCombobox.value = newPlaylistMapping.targetResource.provider.value
+        targetIdTextField.text = newPlaylistMapping.targetResource.id.value
 
-        new.sourceResource.isValid.addListener { _ ->
+        newPlaylistMapping.sourceResource.isValid.addListener { _ ->
             updateEditButton()
         }
 
-        new.targetResource.isValid.addListener { _ ->
+        newPlaylistMapping.targetResource.isValid.addListener { _ ->
             updateEditButton()
         }
 
-        new.isEnabled.addListener { _, _, new ->
+        newPlaylistMapping.isEnabled.addListener { _, _, newEnabled ->
             updateEditButton()
 
-            if (new) {
+            if (newEnabled) {
                 updateData()
             } else {
                 dataLabel.text = ""
@@ -159,20 +160,23 @@ class PlaylistMappingController : Initializable {
                 "\nSource playlist track count: " + sourcePlaylist.tracks?.size +
                 "\nTarget playlist track count: " + targetPlaylist.tracks?.size
 
-        if (targetPlaylist.tracks != null) {
-            val notFound = sourcePlaylist.tracks?.filter {
-                for (targetTrack in targetPlaylist.tracks) {
-                    if (it.name?.replace(Regex("[<>:\"/\\\\|?*]"), "_") == targetTrack.name) {
-                        return@filter false
-                    }
-                }
+        val sourceNames = sourcePlaylist.tracks?.map { track ->
+            track.artists?.let { artists ->
+                Util.getValidFilename(artists.map { it.name }.joinToString()) + " - "
+            } + Util.getValidFilename(track.name ?: "")
+        }?.toHashSet()
+        val targetNames = targetPlaylist.tracks?.map { track ->
+            track.artists?.let { artists ->
+                Util.getValidFilename(artists.map { it.name }.joinToString()) + " - "
+            } + Util.getValidFilename(track.name ?: "")
+        }?.toHashSet()
 
-                return@filter true
-            }?.joinToString("\n") { track ->
-                track.artists?.let { artists -> artists.map { it.name }.joinToString() + " - " } + track.name
-            }
+        val notFound = if (sourceNames != null && targetNames != null) {
+            sourceNames.filter { !targetNames.contains(it) }
+        } else {
+            hashSetOf()
+        }.joinToString("\n")
 
-            dataLabel.text += if (notFound.isNullOrEmpty()) "\nAll found in target!" else "\nNot found in target:\n${notFound}"
-        }
+        dataLabel.text += if (notFound.isEmpty()) "\nAll found in target!" else "\nNot found in target:\n${notFound}"
     }
 }

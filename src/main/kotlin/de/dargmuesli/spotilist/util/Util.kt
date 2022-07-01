@@ -24,4 +24,8 @@ object Util {
 
         return "Playlist Mapping " + (maxIndex + 1)
     }
+
+    fun getValidFilename(string: String): String {
+        return string.replace(Regex("[<>:\"/\\\\|?*]"), "_")
+    }
 }

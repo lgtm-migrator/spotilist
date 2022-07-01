@@ -7,7 +7,6 @@ import de.dargmuesli.spotilist.util.serializer.SpotifyPlaylistTrackSerializer
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections.observableHashMap
-import javafx.collections.MapChangeListener
 import javafx.collections.ObservableMap
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -21,17 +20,8 @@ import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack
 
 @Serializable(with = SpotifyCache.Serializer::class)
 object SpotifyCache : IProviderCache<Playlist, PlaylistTrack> {
-    override var playlistData: ObservableMap<String, Playlist> = observableHashMap<String?, Playlist?>().also {
-        it.addListener(MapChangeListener {
-            Persistence.save(PersistenceTypes.CACHE)
-        })
-    }
-    override var playlistItemData: ObservableMap<String, PlaylistTrack> =
-        observableHashMap<String?, PlaylistTrack?>().also {
-            it.addListener(MapChangeListener {
-                Persistence.save(PersistenceTypes.CACHE)
-            })
-        }
+    override var playlistData: ObservableMap<String, Playlist> = observableHashMap()
+    override var playlistItemData: ObservableMap<String, PlaylistTrack> = observableHashMap()
 
     val accessToken = SimpleStringProperty().also {
         it.addListener { _, _, _ -> Persistence.save(PersistenceTypes.CACHE) }

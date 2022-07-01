@@ -1,6 +1,7 @@
 package de.dargmuesli.spotilist
 
 import de.dargmuesli.spotilist.persistence.Persistence
+import de.dargmuesli.spotilist.persistence.PersistenceTypes
 import de.dargmuesli.spotilist.ui.SpotilistStage
 import de.dargmuesli.spotilist.ui.controllers.DashboardController
 import javafx.application.Application
@@ -17,6 +18,10 @@ class MainApp : Application() {
     override fun start(stage: Stage) {
         SpotilistStage.makeSpotilistStage(stage)
         Companion.stage = stage
+
+        stage.setOnCloseRequest {
+            Persistence.save(PersistenceTypes.CACHE)
+        }
 
         try {
             val dashboardLoader = FXMLLoader(MainApp::class.java.getResource("fxml/dashboard.fxml"), RESOURCES)
